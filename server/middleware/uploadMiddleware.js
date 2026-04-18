@@ -23,8 +23,7 @@ const storage = new CloudinaryStorage({
       resource_type = 'image';
     } else if (file.mimetype === 'application/pdf') {
       folder = 'hiretify/docs';
-      // For some accounts, PDF works better as 'raw' to avoid 401 errors
-      resource_type = 'raw'; 
+      resource_type = 'image';
     }
 
     return {
@@ -46,7 +45,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit

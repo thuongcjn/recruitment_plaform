@@ -1,0 +1,142 @@
+/* ===== LANDING PAGE STYLES ===== */
+
+/* Dot grid background */
+.landing-grid-bg {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Gradient text */
+.landing-gradient-text {
+  background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6, #60a5fa);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 6s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glow button */
+.landing-glow-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.landing-glow-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s ease;
+  border-radius: 50%;
+}
+
+.landing-glow-btn:hover::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Feature card hover */
+.landing-feature-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.landing-feature-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Animated counter */
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.landing-stat {
+  animation: count-up 0.8s ease forwards;
+}
+
+/* Logo scroll */
+@keyframes scroll-logos {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.landing-logo-scroll {
+  animation: scroll-logos 30s linear infinite;
+}
+
+/* Step connector line */
+.landing-step-line {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+}
+
+/* Glow effect for preview */
+.landing-preview-glow {
+  background: radial-gradient(ellipse at 50% 100%, rgba(96, 165, 250, 0.15), transparent 70%);
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.landing-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Fade in on scroll (JS will add .visible) */
+.landing-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.landing-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Star rating */
+.landing-star {
+  color: #facc15;
+}
+
+/* Testimonial card */
+.landing-testimonial {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.06));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.3s ease;
+}
+
+.landing-testimonial:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* CTA section glow */
+.landing-cta-glow {
+  background: radial-gradient(ellipse at 50% 0%, rgba(96, 165, 250, 0.08), transparent 60%);
+}
+
+/* Hide scrollbar for logo section */
+.landing-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.landing-no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -43,6 +43,12 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email }).select('+password');
 
     if (user && (await user.matchPassword(password))) {
+      // Check if user is blocked
+      if (user.isBlocked) {
+        return res.status(403).json({ 
+          message: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ support@hiretify.com để biết thêm chi tiết.' 
+        });
+      }
       await sendTokenResponse(user, 200, res);
     } else {
       res.status(401).json({ message: 'Invalid email or password' });
@@ -112,6 +118,13 @@ exports.refresh = async (req, res) => {
 
     if (!user || user.refreshToken !== token) {
       return res.status(401).json({ message: 'Invalid refresh token' });
+    }
+
+    // Check if user is blocked during refresh
+    if (user.isBlocked) {
+      return res.status(403).json({ 
+        message: 'Tài khoản của bạn đã bị khóa.' 
+      });
     }
 
     await sendTokenResponse(user, 200, res);

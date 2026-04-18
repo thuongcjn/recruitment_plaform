@@ -6,11 +6,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { updateCandidateProfile, uploadFile } from '@/api/profileApi';
 import { getProfile } from '@/api/authApi';
+import { useAuthStore } from '@/store/useAuthStore';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Plus, Trash2, Upload, User, GraduationCap, Briefcase, FileText, CheckCircle } from 'lucide-react';
 
 const CandidateProfile = () => {
+  const { user, setAuth } = useAuthStore();
   const [profile, setProfile] = useState({
     bio: '',
     skills: [],
@@ -53,7 +55,16 @@ const CandidateProfile = () => {
     setError('');
     setSuccess('');
     try {
-      await updateCandidateProfile(profile);
+      const response = await updateCandidateProfile(profile);
+      
+      // Update global auth store to keep state in sync
+      if (response.success) {
+        setAuth({
+          ...user,
+          candidateProfile: response.profile || profile
+        });
+      }
+
       setSuccess('Profile updated successfully!');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
@@ -76,9 +87,16 @@ const CandidateProfile = () => {
       const response = await updateCandidateProfile(newProfile);
       
       if (response.success && response.profile) {
-        setProfile({
+        const updatedProfile = {
           ...profile,
           resumeUrl: response.profile.resumeUrl
+        };
+        setProfile(updatedProfile);
+
+        // Update global auth store to keep state in sync
+        setAuth({
+          ...user,
+          candidateProfile: response.profile
         });
       }
       

@@ -14,6 +14,7 @@ const protect = async (req, res, next) => {
     // Get token from cookie
     token = req.cookies.accessToken;
   }
+  
   if (token) {
     try {
       // Verify token
@@ -21,6 +22,15 @@ const protect = async (req, res, next) => {
 
       // Get user from the token
       req.user = await User.findById(decoded.id).select('-password');
+
+      if (!req.user) {
+        return res.status(401).json({ message: 'User not found' });
+      }
+
+      // Check if user is blocked
+      if (req.user.isBlocked) {
+        return res.status(403).json({ message: 'Your account has been blocked by the administrator.' });
+      }
 
       if (typeof next === 'function') {
         next();

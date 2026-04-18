@@ -120,7 +120,7 @@ exports.updateApplicationStatus = async (req, res) => {
     }
 
     const updatedApplication = await Application.findByIdAndUpdate(req.params.id, { status }, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true
     }).populate('candidate', 'fullName email').populate('job', 'title');
 

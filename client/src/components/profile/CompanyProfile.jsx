@@ -6,10 +6,12 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { updateCompanyProfile, uploadFile } from '@/api/profileApi';
 import { getProfile } from '@/api/authApi';
+import { useAuthStore } from '@/store/useAuthStore';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Upload, Globe, MapPin, Building2, CheckCircle, Info } from 'lucide-react';
 
 const CompanyProfile = () => {
+  const { user, setAuth } = useAuthStore();
   const [profile, setProfile] = useState({
     companyName: '',
     description: '',
@@ -50,7 +52,16 @@ const CompanyProfile = () => {
     setError('');
     setSuccess('');
     try {
-      await updateCompanyProfile(profile);
+      const response = await updateCompanyProfile(profile);
+      
+      // Update global auth store
+      if (response.success) {
+        setAuth({
+          ...user,
+          companyProfile: response.profile || profile
+        });
+      }
+
       setSuccess('Company profile updated successfully!');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
@@ -69,8 +80,16 @@ const CompanyProfile = () => {
       const data = await uploadFile(file);
       const newProfile = { ...profile, logoUrl: data.url };
       setProfile(newProfile);
-      // Auto save after upload
-      await updateCompanyProfile(newProfile);
+      
+      // Auto save after upload and update store
+      const response = await updateCompanyProfile(newProfile);
+      if (response.success) {
+        setAuth({
+          ...user,
+          companyProfile: response.profile
+        });
+      }
+
       setSuccess('Logo updated and saved!');
     } catch (err) {
       setError('Failed to upload logo');

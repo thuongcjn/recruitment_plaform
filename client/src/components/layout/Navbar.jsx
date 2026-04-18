@@ -4,7 +4,8 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from '@/components/ui/button';
 import { 
   Briefcase, User, LogOut, ChevronDown, 
-  Settings, Bell, Menu, X, PlusCircle, Search as SearchIcon
+  Settings, Bell, Menu, X, PlusCircle, Search as SearchIcon,
+  MessageSquare, ShieldCheck, LayoutDashboard, Users, Flag
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -35,6 +36,7 @@ const Navbar = () => {
   };
 
   const isActive = (path) => location.pathname === path;
+  const isAdmin = user?.role === 'admin';
 
   return (
     <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
@@ -45,21 +47,34 @@ const Navbar = () => {
           
           {/* Logo & Main Nav */}
           <div className="flex items-center gap-10">
-            <Link to="/" className="flex items-center gap-2 group">
+            <Link to={isAdmin ? "/admin/dashboard" : (isAuthenticated ? "/jobs" : "/")} className="flex items-center gap-2 group">
               <div className="bg-black p-1.5 rounded-lg transition-transform group-hover:rotate-6">
                 <Briefcase className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-black tracking-tighter text-black uppercase">Hiretify</span>
+              <span className="text-xl font-black tracking-tighter text-black uppercase">Hiretify {isAdmin && <span className="text-red-600">Admin</span>}</span>
             </Link>
 
             <nav className="hidden lg:flex items-center gap-8">
-              <Link 
-                to="/" 
-                className={`text-sm font-bold transition-all hover:text-black ${isActive('/') ? 'text-black' : 'text-gray-500'}`}
-              >
-                Find Jobs
-              </Link>
-              
+              {!isAdmin && (
+                <>
+                  <Link 
+                    to="/jobs" 
+                    className={`text-sm font-bold transition-all hover:text-black ${isActive('/jobs') || isActive('/') ? 'text-black' : 'text-gray-500'}`}
+                  >
+                    Find Jobs
+                  </Link>
+                  
+                  {isAuthenticated && (
+                    <Link 
+                      to="/chat" 
+                      className={`text-sm font-bold transition-all hover:text-black ${isActive('/chat') ? 'text-black' : 'text-gray-500'}`}
+                    >
+                      Messages
+                    </Link>
+                  )}
+                </>
+              )}
+
               {isAuthenticated && user?.role === 'candidate' && (
                 <Link 
                   to="/applied-jobs" 
@@ -85,6 +100,29 @@ const Navbar = () => {
                   </Link>
                 </>
               )}
+
+              {isAdmin && (
+                <>
+                  <Link 
+                    to="/admin/dashboard" 
+                    className={`text-sm font-black flex items-center gap-2 transition-all ${isActive('/admin/dashboard') ? 'text-black' : 'text-gray-500 hover:text-black'}`}
+                  >
+                    <LayoutDashboard className="h-4 w-4" /> Dashboard
+                  </Link>
+                  <Link 
+                    to="/admin/users" 
+                    className={`text-sm font-black flex items-center gap-2 transition-all ${isActive('/admin/users') ? 'text-black' : 'text-gray-500 hover:text-black'}`}
+                  >
+                    <Users className="h-4 w-4" /> Users
+                  </Link>
+                  <Link 
+                    to="/admin/reports" 
+                    className={`text-sm font-black flex items-center gap-2 transition-all ${isActive('/admin/reports') ? 'text-red-600' : 'text-gray-500 hover:text-red-600'}`}
+                  >
+                    <Flag className="h-4 w-4" /> Job Reports
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
 
@@ -92,9 +130,11 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" className="text-gray-500 rounded-full hover:bg-gray-100 hidden sm:flex">
-                  <Bell className="h-5 w-5" />
-                </Button>
+                {!isAdmin && (
+                  <Button variant="ghost" size="icon" className="text-gray-500 rounded-full hover:bg-gray-100 hidden sm:flex">
+                    <Bell className="h-5 w-5" />
+                  </Button>
+                )}
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -120,6 +160,20 @@ const Navbar = () => {
                         <User className="mr-3 h-4 w-4" /> Profile Details
                       </Link>
                     </DropdownMenuItem>
+                    {!isAdmin && (
+                      <DropdownMenuItem asChild className="rounded-xl cursor-pointer py-2.5">
+                        <Link to="/chat" className="flex items-center font-bold">
+                          <MessageSquare className="mr-3 h-4 w-4" /> Messages
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    {isAdmin && (
+                      <DropdownMenuItem asChild className="rounded-xl cursor-pointer py-2.5 text-red-600 focus:text-red-700 focus:bg-red-50">
+                        <Link to="/admin/dashboard" className="flex items-center font-bold">
+                          <ShieldCheck className="mr-3 h-4 w-4" /> Admin Console
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem asChild className="rounded-xl cursor-pointer py-2.5">
                       <Link to="/settings" className="flex items-center font-bold">
                         <Settings className="mr-3 h-4 w-4" /> Settings
@@ -160,7 +214,19 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white border-b absolute w-full left-0 p-6 animate-in slide-in-from-top-4 duration-200">
           <nav className="flex flex-col gap-4">
-            <Link to="/" className="text-lg font-black text-black">Find Jobs</Link>
+            {!isAdmin && (
+              <>
+                <Link to="/jobs" className="text-lg font-black text-black">Find Jobs</Link>
+                <Link to="/chat" className="text-lg font-black text-black">Messages</Link>
+              </>
+            )}
+            {isAdmin && (
+              <>
+                <Link to="/admin/dashboard" className="text-lg font-black text-black">Dashboard</Link>
+                <Link to="/admin/users" className="text-lg font-black text-black">Users</Link>
+                <Link to="/admin/reports" className="text-lg font-black text-red-600">Reports</Link>
+              </>
+            )}
             {isAuthenticated && user?.role === 'candidate' && (
               <Link to="/applied-jobs" className="text-lg font-black text-black">My Applications</Link>
             )}

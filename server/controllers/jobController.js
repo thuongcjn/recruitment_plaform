@@ -101,7 +101,7 @@ exports.updateJob = async (req, res) => {
     }
 
     job = await Job.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true
     });
 

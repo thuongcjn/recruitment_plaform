@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getMyApplications } from '@/api/applicationApi';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, Briefcase, Calendar, MapPin, Building2, ExternalLink, ChevronRight } from 'lucide-react';
+import { Loader2, Briefcase, Calendar, MapPin, Building2, ExternalLink, ChevronRight, AlertCircle } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { Link } from 'react-router-dom';
 
@@ -65,52 +65,70 @@ const AppliedJobs = () => {
           </Card>
         ) : (
           <div className="grid gap-4">
-            {applications.map((app) => (
-              <Card key={app._id} className="border-none shadow-sm rounded-2xl bg-white hover:shadow-md transition-all group overflow-hidden">
-                <div className="flex flex-col md:flex-row items-stretch">
-                  {/* Status Indicator Bar */}
-                  <div className={`w-2 ${getStatusColor(app.status).split(' ')[0]}`}></div>
-                  
-                  <CardContent className="flex-1 p-6">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="flex items-start gap-4">
-                        <div className="h-14 w-14 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 shrink-0">
-                          {app.job.company?.companyProfile?.logoUrl ? (
-                            <img src={app.job.company.companyProfile.logoUrl} alt="logo" className="w-full h-full object-contain p-1 rounded-xl" />
-                          ) : (
-                            <Building2 className="h-7 w-7 text-gray-300" />
-                          )}
-                        </div>
-                        <div className="space-y-1">
-                          <Link to={`/jobs/${app.job._id}`} className="text-xl font-bold text-black hover:text-blue-600 transition-colors flex items-center gap-2">
-                            {app.job.title} <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-transform group-hover:translate-x-1" />
-                          </Link>
-                          <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-sm font-bold text-gray-500">
-                            <span className="text-gray-900">{app.job.company?.companyProfile?.companyName || app.job.company?.fullName}</span>
-                            <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {app.job.location}</span>
-                            <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" /> Applied on {new Date(app.createdAt).toLocaleDateString()}</span>
+            {applications.map((app) => {
+              // Handle case where job was deleted
+              const jobExists = app.job !== null;
+              
+              return (
+                <Card key={app._id} className="border-none shadow-sm rounded-2xl bg-white hover:shadow-md transition-all group overflow-hidden">
+                  <div className="flex flex-col md:flex-row items-stretch">
+                    {/* Status Indicator Bar */}
+                    <div className={`w-2 ${getStatusColor(app.status).split(' ')[0]}`}></div>
+                    
+                    <CardContent className="flex-1 p-6">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="flex items-start gap-4">
+                          <div className="h-14 w-14 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 shrink-0">
+                            {jobExists && app.job.company?.companyProfile?.logoUrl ? (
+                              <img src={app.job.company.companyProfile.logoUrl} alt="logo" className="w-full h-full object-contain p-1 rounded-xl" />
+                            ) : (
+                              <Building2 className="h-7 w-7 text-gray-300" />
+                            )}
+                          </div>
+                          <div className="space-y-1">
+                            {jobExists ? (
+                              <>
+                                <Link to={`/jobs/${app.job._id}`} className="text-xl font-bold text-black hover:text-blue-600 transition-colors flex items-center gap-2">
+                                  {app.job.title} <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-transform group-hover:translate-x-1" />
+                                </Link>
+                                <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-sm font-bold text-gray-500">
+                                  <span className="text-gray-900">{app.job.company?.companyProfile?.companyName || app.job.company?.fullName}</span>
+                                  <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {app.job.location}</span>
+                                  <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" /> Applied on {new Date(app.createdAt).toLocaleDateString()}</span>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="text-xl font-bold text-gray-400 flex items-center gap-2 italic">
+                                  Job No Longer Available <AlertCircle className="h-4 w-4 text-red-400" />
+                                </div>
+                                <div className="text-sm font-bold text-gray-400">
+                                  Applied on {new Date(app.createdAt).toLocaleDateString()}
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
-                      </div>
 
-                      <div className="flex flex-col items-end gap-3 shrink-0">
-                        <Badge className={`${getStatusColor(app.status)} px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border`}>
-                          {app.status}
-                        </Badge>
-                        <a 
-                          href={app.resume} 
-                          target="_blank" 
-                          rel="noreferrer" 
-                          className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
-                        >
-                          <ExternalLink className="h-3 w-3" /> View Submitted CV
-                        </a>
+                        <div className="flex flex-col items-end gap-3 shrink-0">
+                          <Badge className={`${getStatusColor(app.status)} px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border`}>
+                            {app.status}
+                          </Badge>
+                          <a 
+                            href={app.resume} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
+                          >
+                            <ExternalLink className="h-3 w-3" /> View Submitted CV
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </div>
-              </Card>
-            ))}
+                    </CardContent>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         )}
       </div>

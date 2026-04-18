@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import { getProfile } from './api/authApi';
 import Login from './pages/Login';
@@ -14,6 +14,12 @@ import CompanyPublicProfile from './pages/CompanyPublicProfile';
 import Navbar from './components/layout/Navbar';
 import AppliedJobs from './pages/AppliedJobs';
 import ViewApplicants from './pages/ViewApplicants';
+import Chat from './pages/Chat';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminReports from './pages/AdminReports';
+import AdminUsers from './pages/AdminUsers';
+import LandingPage from './pages/LandingPage';
+import { SocketProvider } from './context/SocketContext';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -25,9 +31,141 @@ const ProtectedRoute = ({ children }) => {
 const RecruiterRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
   if (!isAuthenticated) return <Navigate to="/login" />;
-  if (user?.role !== 'recruiter') return <Navigate to="/" />;
+  if (user?.role !== 'recruiter') return <Navigate to="/jobs" />;
   return children;
 };
+
+// Admin Only Route
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, user } = useAuthStore();
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  if (user?.role !== 'admin') return <Navigate to="/jobs" />;
+  return children;
+};
+
+function MainLayout() {
+  const { isAuthenticated } = useAuthStore();
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+
+  return (
+    <div className="min-h-screen bg-gray-50/30">
+      {!isLandingPage && <Navbar />}
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={isAuthenticated ? <Navigate to="/jobs" /> : <LandingPage />} />
+        <Route path="/jobs" element={<JobFeed />} />
+        <Route path="/jobs/:id" element={<JobDetails />} />
+        <Route path="/company/:id" element={<CompanyPublicProfile />} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/jobs" /> : <Login />} />
+        <Route path="/register" element={isAuthenticated ? <Navigate to="/jobs" /> : <Register />} />
+        
+        {/* Protected Routes */}
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/chat" 
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/chat/:id" 
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Recruiter Routes */}
+        <Route 
+          path="/post-job" 
+          element={
+            <RecruiterRoute>
+              <PostJob />
+            </RecruiterRoute>
+          } 
+        />
+
+        <Route 
+          path="/my-jobs" 
+          element={
+            <RecruiterRoute>
+              <MyJobs />
+            </RecruiterRoute>
+          } 
+        />
+
+        <Route 
+          path="/edit-job/:id" 
+          element={
+            <RecruiterRoute>
+              <EditJob />
+            </RecruiterRoute>
+          } 
+        />
+
+        <Route 
+          path="/applied-jobs" 
+          element={
+            <ProtectedRoute>
+              <AppliedJobs />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/applicants/:jobId" 
+          element={
+            <RecruiterRoute>
+              <ViewApplicants />
+            </RecruiterRoute>
+          } 
+        />
+
+        {/* Admin Routes */}
+        <Route 
+          path="/admin/dashboard" 
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          } 
+        />
+        <Route 
+          path="/admin/reports" 
+          element={
+            <AdminRoute>
+              <AdminReports />
+            </AdminRoute>
+          } 
+        />
+        <Route 
+          path="/admin/users" 
+          element={
+            <AdminRoute>
+              <AdminUsers />
+            </AdminRoute>
+          } 
+        />
+
+        {/* Catch all */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </div>
+  );
+}
 
 function App() {
   const { setAuth, logout } = useAuthStore();
@@ -61,78 +199,11 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-50/30">
-        <Navbar />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<JobFeed />} />
-          <Route path="/jobs/:id" element={<JobDetails />} />
-          <Route path="/company/:id" element={<CompanyPublicProfile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          
-          {/* Protected Routes */}
-          <Route 
-            path="/profile" 
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Recruiter Routes */}
-          <Route 
-            path="/post-job" 
-            element={
-              <RecruiterRoute>
-                <PostJob />
-              </RecruiterRoute>
-            } 
-          />
-
-          <Route 
-            path="/my-jobs" 
-            element={
-              <RecruiterRoute>
-                <MyJobs />
-              </RecruiterRoute>
-            } 
-          />
-
-          <Route 
-            path="/edit-job/:id" 
-            element={
-              <RecruiterRoute>
-                <EditJob />
-              </RecruiterRoute>
-            } 
-          />
-
-          <Route 
-            path="/applied-jobs" 
-            element={
-              <ProtectedRoute>
-                <AppliedJobs />
-              </ProtectedRoute>
-            } 
-          />
-
-          <Route 
-            path="/applicants/:jobId" 
-            element={
-              <RecruiterRoute>
-                <ViewApplicants />
-              </RecruiterRoute>
-            } 
-          />
-
-          {/* Catch all */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </div>
-    </Router>
+    <SocketProvider>
+      <Router>
+        <MainLayout />
+      </Router>
+    </SocketProvider>
   );
 }
 

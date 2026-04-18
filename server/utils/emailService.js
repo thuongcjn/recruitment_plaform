@@ -35,13 +35,14 @@ const sendEmail = async (options) => {
 };
 
 const sendNewApplicationEmail = async (recruiterEmail, candidateName, jobTitle) => {
+  const clientUrl = process.env.CLIENT_URL;
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
       <h2 style="color: #000; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">New Application Received!</h2>
       <p>Hello,</p>
       <p>A new candidate <strong>${candidateName}</strong> has applied for your position: <strong>${jobTitle}</strong>.</p>
       <div style="margin: 30px 0;">
-        <a href="http://localhost:5173/my-jobs" style="background: #000; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Review Candidate</a>
+        <a href="${clientUrl}/my-jobs" style="background: #000; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Review Candidate</a>
       </div>
       <p style="color: #888; font-size: 12px;">This is an automated message from Hiretify.</p>
     </div>
@@ -55,6 +56,7 @@ const sendNewApplicationEmail = async (recruiterEmail, candidateName, jobTitle) 
 };
 
 const sendStatusUpdateEmail = async (candidateEmail, candidateName, jobTitle, status) => {
+  const clientUrl = process.env.CLIENT_URL;
   const statusColors = {
     accepted: '#22c55e',
     rejected: '#ef4444',
@@ -77,7 +79,7 @@ const sendStatusUpdateEmail = async (candidateEmail, candidateName, jobTitle, st
       </div>
       <p>You can check more details on your dashboard.</p>
       <div style="margin: 30px 0;">
-        <a href="http://localhost:5173/applied-jobs" style="background: #000; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">View My Applications</a>
+        <a href="${clientUrl}/applied-jobs" style="background: #000; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">View My Applications</a>
       </div>
       <p style="color: #888; font-size: 12px;">This is an automated message from Hiretify.</p>
     </div>
