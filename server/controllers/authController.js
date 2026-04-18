@@ -45,8 +45,8 @@ exports.login = async (req, res) => {
     if (user && (await user.matchPassword(password))) {
       // Check if user is blocked
       if (user.isBlocked) {
-        return res.status(403).json({ 
-          message: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ support@hiretify.com để biết thêm chi tiết.' 
+        return res.status(403).json({
+          message: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ support@hiretify.com để biết thêm chi tiết.'
         });
       }
       await sendTokenResponse(user, 200, res);
@@ -92,11 +92,15 @@ exports.logout = async (req, res) => {
   res.cookie('accessToken', 'none', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
+    secure: true,
+    sameSite: 'none',
   });
 
   res.cookie('refreshToken', 'none', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
+    secure: true,
+    sameSite: 'none',
   });
 
   res.status(200).json({ success: true, message: 'User logged out' });
@@ -122,8 +126,8 @@ exports.refresh = async (req, res) => {
 
     // Check if user is blocked during refresh
     if (user.isBlocked) {
-      return res.status(403).json({ 
-        message: 'Tài khoản của bạn đã bị khóa.' 
+      return res.status(403).json({
+        message: 'Tài khoản của bạn đã bị khóa.'
       });
     }
 
