@@ -149,7 +149,8 @@ const sendTokenResponse = async (user, statusCode, res) => {
 
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true, // Required for sameSite: 'none'
+    sameSite: 'none', // Required for cross-site cookies
   };
 
   res
