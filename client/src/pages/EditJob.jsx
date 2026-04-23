@@ -46,7 +46,7 @@ const EditJob = () => {
           status: job.status || 'open'
         });
       } catch (err) {
-        setError('Failed to fetch job details');
+        setError('Không thể tải chi tiết công việc');
       } finally {
         setLoading(false);
       }
@@ -78,7 +78,7 @@ const EditJob = () => {
       await updateJob(id, processedData);
       navigate('/my-jobs');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update job');
+      setError(err.response?.data?.message || 'Cập nhật tin tuyển dụng thất bại');
     } finally {
       setSaving(false);
     }
@@ -87,53 +87,53 @@ const EditJob = () => {
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-20 space-y-4">
       <Loader2 className="animate-spin h-10 w-10 text-blue-600" />
-      <p className="text-gray-500 font-medium">Loading job details...</p>
+      <p className="text-gray-500 font-medium">Đang tải chi tiết công việc...</p>
     </div>
   );
 
   return (
     <div className="container mx-auto py-10 px-4 max-w-3xl">
       <Button variant="ghost" onClick={() => navigate('/my-jobs')} className="mb-6">
-        <ArrowLeft className="h-4 w-4 mr-2" /> Back to My Jobs
+        <ArrowLeft className="h-4 w-4 mr-2" /> Quay lại tin tuyển dụng
       </Button>
 
       <Card className="shadow-lg border-none">
         <CardHeader className="bg-white border-b p-8">
-          <CardTitle className="text-2xl font-bold">Edit Job Posting</CardTitle>
-          <CardDescription>Update the details for your job opening.</CardDescription>
+          <CardTitle className="text-2xl font-bold">Chỉnh sửa tin tuyển dụng</CardTitle>
+          <CardDescription>Cập nhật thông tin chi tiết cho vị trí tuyển dụng của bạn.</CardDescription>
         </CardHeader>
         <CardContent className="p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
 
             <div className="space-y-2">
-              <Label htmlFor="title">Job Title</Label>
-              <Input id="title" name="title" value={formData.title} onChange={handleChange} required placeholder="e.g. Senior Frontend Engineer" />
+              <Label htmlFor="title">Tiêu đề công việc</Label>
+              <Input id="title" name="title" value={formData.title} onChange={handleChange} required placeholder="v.d. Kỹ sư Frontend cao cấp" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Job Type</Label>
+                <Label>Loại hình công việc</Label>
                 <Select value={formData.type} onValueChange={(v) => handleSelectChange('type', v)}>
-                  <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder="Chọn loại hình" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Intern">Intern</SelectItem>
-                    <SelectItem value="Part-time">Part-time</SelectItem>
-                    <SelectItem value="Full-time">Full-time</SelectItem>
-                    <SelectItem value="Freelance">Freelance</SelectItem>
+                    <SelectItem value="Internship">Thực tập</SelectItem>
+                    <SelectItem value="Part-time">Bán thời gian</SelectItem>
+                    <SelectItem value="Full-time">Toàn thời gian</SelectItem>
+                    <SelectItem value="Freelance">Làm việc tự do</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Category</Label>
+                <Label>Lĩnh vực</Label>
                 <Select value={formData.category} onValueChange={(v) => handleSelectChange('category', v)}>
-                  <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder="Chọn lĩnh vực" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="IT & Software">IT & Software</SelectItem>
+                    <SelectItem value="IT & Software">CNTT & Phần mềm</SelectItem>
                     <SelectItem value="Marketing">Marketing</SelectItem>
-                    <SelectItem value="Design">Design</SelectItem>
-                    <SelectItem value="Finance">Finance</SelectItem>
-                    <SelectItem value="Others">Others</SelectItem>
+                    <SelectItem value="Design">Thiết kế</SelectItem>
+                    <SelectItem value="Finance">Tài chính</SelectItem>
+                    <SelectItem value="Others">Khác</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -141,45 +141,45 @@ const EditJob = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
-                <Input id="location" name="location" value={formData.location} onChange={handleChange} required placeholder="e.g. Ho Chi Minh City, VN" />
+                <Label htmlFor="location">Địa điểm</Label>
+                <Input id="location" name="location" value={formData.location} onChange={handleChange} required placeholder="v.d. TP. Hồ Chí Minh" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="salaryRange">Salary Range</Label>
-                <Input id="salaryRange" name="salaryRange" value={formData.salaryRange} onChange={handleChange} placeholder="e.g. $1000 - $2000" />
+                <Label htmlFor="salaryRange">Mức lương</Label>
+                <Input id="salaryRange" name="salaryRange" value={formData.salaryRange} onChange={handleChange} placeholder="v.d. 15tr - 20tr VNĐ" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label>Job Status</Label>
+              <Label>Trạng thái tin</Label>
               <Select value={formData.status} onValueChange={(v) => handleSelectChange('status', v)}>
-                <SelectTrigger><SelectValue placeholder="Select status" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder="Chọn trạng thái" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="open">Open (Active)</SelectItem>
-                  <SelectItem value="closed">Closed (Hidden)</SelectItem>
+                  <SelectItem value="open">Đang mở (Hiển thị)</SelectItem>
+                  <SelectItem value="closed">Đã đóng (Ẩn)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Job Description</Label>
-              <Textarea id="description" name="description" value={formData.description} onChange={handleChange} required className="min-h-[150px]" placeholder="Describe the role and your company..." />
+              <Label htmlFor="description">Mô tả công việc</Label>
+              <Textarea id="description" name="description" value={formData.description} onChange={handleChange} required className="min-h-[150px]" placeholder="Mô tả về vai trò và công ty của bạn..." />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="requirements">Requirements (one per line)</Label>
-              <Textarea id="requirements" name="requirements" value={formData.requirements} onChange={handleChange} required className="min-h-[120px]" placeholder="React.js experience&#10;Good communication..." />
+              <Label htmlFor="requirements">Yêu cầu (mỗi dòng một ý)</Label>
+              <Textarea id="requirements" name="requirements" value={formData.requirements} onChange={handleChange} required className="min-h-[120px]" placeholder="Kinh nghiệm React.js&#10;Giao tiếp tốt..." />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="benefits">Benefits (one per line)</Label>
-              <Textarea id="benefits" name="benefits" value={formData.benefits} onChange={handleChange} required className="min-h-[120px]" placeholder="Flexible working hours&#10;Private health insurance..." />
+              <Label htmlFor="benefits">Quyền lợi (mỗi dòng một ý)</Label>
+              <Textarea id="benefits" name="benefits" value={formData.benefits} onChange={handleChange} required className="min-h-[120px]" placeholder="Thời gian làm việc linh hoạt&#10;Bảo hiểm sức khỏe cao cấp..." />
             </div>
 
             <div className="pt-4 flex gap-4">
-              <Button type="button" variant="outline" onClick={() => navigate('/my-jobs')} className="flex-1">Cancel</Button>
-              <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700" disabled={saving}>
-                {saving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving Changes...</> : <><Save className="mr-2 h-4 w-4" /> Save Changes</>}
+              <Button type="button" variant="outline" onClick={() => navigate('/my-jobs')} className="flex-1">Hủy</Button>
+              <Button type="submit" className="flex-1 bg-black hover:bg-gray-800" disabled={saving}>
+                {saving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang lưu thay đổi...</> : <><Save className="mr-2 h-4 w-4" /> Lưu thay đổi</>}
               </Button>
             </div>
           </form>

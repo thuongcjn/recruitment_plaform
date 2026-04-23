@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from '@/components/ui/button';
-import { 
-  Briefcase, User, LogOut, ChevronDown, 
+import {
+  Briefcase, User, LogOut, ChevronDown,
   Settings, Bell, Menu, X, PlusCircle, Search as SearchIcon,
   MessageSquare, ShieldCheck, LayoutDashboard, Users, Flag
 } from 'lucide-react';
@@ -18,7 +18,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated, handleLogout: storeLogout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -30,96 +30,98 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await storeLogout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback to local logout if API fails
+      navigate('/login');
+    }
   };
 
   const isActive = (path) => location.pathname === path;
   const isAdmin = user?.role === 'admin';
 
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-      isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm border-b' : 'bg-transparent border-b border-transparent'
-    }`}>
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm border-b' : 'bg-transparent border-b border-transparent'
+      }`}>
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex h-16 items-center justify-between gap-8">
-          
+
           {/* Logo & Main Nav */}
           <div className="flex items-center gap-10">
             <Link to={isAdmin ? "/admin/dashboard" : (isAuthenticated ? "/jobs" : "/")} className="flex items-center gap-2 group">
-              <div className="bg-black p-1.5 rounded-lg transition-transform group-hover:rotate-6">
-                <Briefcase className="h-5 w-5 text-white" />
-              </div>
               <span className="text-xl font-black tracking-tighter text-black uppercase">Hiretify {isAdmin && <span className="text-red-600">Admin</span>}</span>
             </Link>
 
             <nav className="hidden lg:flex items-center gap-8">
               {!isAdmin && (
                 <>
-                  <Link 
-                    to="/jobs" 
+                  <Link
+                    to="/jobs"
                     className={`text-sm font-bold transition-all hover:text-black ${isActive('/jobs') || isActive('/') ? 'text-black' : 'text-gray-500'}`}
                   >
-                    Find Jobs
+                    Tìm việc làm
                   </Link>
-                  
+
                   {isAuthenticated && (
-                    <Link 
-                      to="/chat" 
+                    <Link
+                      to="/chat"
                       className={`text-sm font-bold transition-all hover:text-black ${isActive('/chat') ? 'text-black' : 'text-gray-500'}`}
                     >
-                      Messages
+                      Tin nhắn
                     </Link>
                   )}
                 </>
               )}
 
               {isAuthenticated && user?.role === 'candidate' && (
-                <Link 
-                  to="/applied-jobs" 
+                <Link
+                  to="/applied-jobs"
                   className={`text-sm font-bold transition-all hover:text-black ${isActive('/applied-jobs') ? 'text-black' : 'text-gray-500'}`}
                 >
-                  My Applications
+                  Việc đã ứng tuyển
                 </Link>
               )}
 
               {isAuthenticated && user?.role === 'recruiter' && (
                 <>
-                  <Link 
-                    to="/my-jobs" 
+                  <Link
+                    to="/my-jobs"
                     className={`text-sm font-bold transition-all hover:text-black ${isActive('/my-jobs') ? 'text-black' : 'text-gray-500'}`}
                   >
-                    Dashboard
+                    Bảng điều khiển
                   </Link>
-                  <Link 
-                    to="/post-job" 
+                  <Link
+                    to="/post-job"
                     className={`text-sm font-bold transition-all hover:text-black ${isActive('/post-job') ? 'text-black' : 'text-gray-500'}`}
                   >
-                    Post a Job
+                    Đăng tin tuyển dụng
                   </Link>
                 </>
               )}
 
               {isAdmin && (
                 <>
-                  <Link 
-                    to="/admin/dashboard" 
+                  <Link
+                    to="/admin/dashboard"
                     className={`text-sm font-black flex items-center gap-2 transition-all ${isActive('/admin/dashboard') ? 'text-black' : 'text-gray-500 hover:text-black'}`}
                   >
-                    <LayoutDashboard className="h-4 w-4" /> Dashboard
+                    <LayoutDashboard className="h-4 w-4" /> Tổng quan
                   </Link>
-                  <Link 
-                    to="/admin/users" 
+                  <Link
+                    to="/admin/users"
                     className={`text-sm font-black flex items-center gap-2 transition-all ${isActive('/admin/users') ? 'text-black' : 'text-gray-500 hover:text-black'}`}
                   >
-                    <Users className="h-4 w-4" /> Users
+                    <Users className="h-4 w-4" /> Người dùng
                   </Link>
-                  <Link 
-                    to="/admin/reports" 
-                    className={`text-sm font-black flex items-center gap-2 transition-all ${isActive('/admin/reports') ? 'text-red-600' : 'text-gray-500 hover:text-red-600'}`}
+                  <Link
+                    to="/admin/reports"
+                    className={`text-sm font-black flex items-center gap-2 transition-all ${isActive('/admin/reports') ? 'text-black' : 'text-gray-500 hover:text-black'}`}
                   >
-                    <Flag className="h-4 w-4" /> Job Reports
+                    <Flag className="h-4 w-4" /> Báo cáo vi phạm
                   </Link>
                 </>
               )}
@@ -147,51 +149,54 @@ const Navbar = () => {
                       </Avatar>
                       <div className="hidden md:flex flex-col items-start leading-none">
                         <span className="text-xs font-black text-black">{user?.fullName}</span>
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{user?.role}</span>
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
+                          {user?.role === 'candidate' ? 'Ứng viên' : 
+                           user?.role === 'recruiter' ? 'Nhà tuyển dụng' : 'Quản trị viên'}
+                        </span>
                       </div>
                       <ChevronDown className="h-3 w-3 text-gray-400" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 p-2 rounded-2xl shadow-2xl border-gray-100 mt-2">
-                    <DropdownMenuLabel className="font-black text-xs uppercase tracking-widest text-gray-400 p-2">Account Settings</DropdownMenuLabel>
+                    <DropdownMenuLabel className="font-black text-xs uppercase tracking-widest text-gray-400 p-2">Cài đặt tài khoản</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild className="rounded-xl cursor-pointer py-2.5">
                       <Link to="/profile" className="flex items-center font-bold">
-                        <User className="mr-3 h-4 w-4" /> Profile Details
+                        <User className="mr-3 h-4 w-4" /> Hồ sơ cá nhân
                       </Link>
                     </DropdownMenuItem>
                     {!isAdmin && (
                       <DropdownMenuItem asChild className="rounded-xl cursor-pointer py-2.5">
                         <Link to="/chat" className="flex items-center font-bold">
-                          <MessageSquare className="mr-3 h-4 w-4" /> Messages
+                          <MessageSquare className="mr-3 h-4 w-4" /> Tin nhắn
                         </Link>
                       </DropdownMenuItem>
                     )}
                     {isAdmin && (
                       <DropdownMenuItem asChild className="rounded-xl cursor-pointer py-2.5 text-red-600 focus:text-red-700 focus:bg-red-50">
                         <Link to="/admin/dashboard" className="flex items-center font-bold">
-                          <ShieldCheck className="mr-3 h-4 w-4" /> Admin Console
+                          <ShieldCheck className="mr-3 h-4 w-4" /> Quản trị viên
                         </Link>
                       </DropdownMenuItem>
                     )}
                     <DropdownMenuItem asChild className="rounded-xl cursor-pointer py-2.5">
                       <Link to="/settings" className="flex items-center font-bold">
-                        <Settings className="mr-3 h-4 w-4" /> Settings
+                        <Settings className="mr-3 h-4 w-4" /> Cài đặt
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
                       onClick={handleLogout}
                       className="rounded-xl cursor-pointer py-2.5 text-red-600 focus:text-red-600 focus:bg-red-50 font-bold"
                     >
-                      <LogOut className="mr-3 h-4 w-4" /> Log Out
+                      <LogOut className="mr-3 h-4 w-4" /> Đăng xuất
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="lg:hidden text-black rounded-full"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
@@ -200,9 +205,9 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center gap-3">
-                <Link to="/login" className="text-sm font-bold text-gray-600 hover:text-black px-4">Log In</Link>
+                <Link to="/login" className="text-sm font-bold text-gray-600 hover:text-black px-4">Đăng nhập</Link>
                 <Button asChild className="bg-black hover:bg-gray-800 text-white rounded-full px-6 font-bold text-sm shadow-md transition-all active:scale-95">
-                  <Link to="/register">Sign Up</Link>
+                  <Link to="/register">Đăng ký</Link>
                 </Button>
               </div>
             )}
@@ -216,29 +221,29 @@ const Navbar = () => {
           <nav className="flex flex-col gap-4">
             {!isAdmin && (
               <>
-                <Link to="/jobs" className="text-lg font-black text-black">Find Jobs</Link>
-                <Link to="/chat" className="text-lg font-black text-black">Messages</Link>
+                <Link to="/jobs" className="text-lg font-black text-black">Tìm việc làm</Link>
+                <Link to="/chat" className="text-lg font-black text-black">Tin nhắn</Link>
               </>
             )}
             {isAdmin && (
               <>
-                <Link to="/admin/dashboard" className="text-lg font-black text-black">Dashboard</Link>
-                <Link to="/admin/users" className="text-lg font-black text-black">Users</Link>
-                <Link to="/admin/reports" className="text-lg font-black text-red-600">Reports</Link>
+                <Link to="/admin/dashboard" className="text-lg font-black text-black">Tổng quan</Link>
+                <Link to="/admin/users" className="text-lg font-black text-black">Người dùng</Link>
+                <Link to="/admin/reports" className="text-lg font-black text-red-600">Báo cáo</Link>
               </>
             )}
             {isAuthenticated && user?.role === 'candidate' && (
-              <Link to="/applied-jobs" className="text-lg font-black text-black">My Applications</Link>
+              <Link to="/applied-jobs" className="text-lg font-black text-black">Việc đã ứng tuyển</Link>
             )}
             {isAuthenticated && user?.role === 'recruiter' && (
               <>
-                <Link to="/my-jobs" className="text-lg font-black text-black">Dashboard</Link>
-                <Link to="/post-job" className="text-lg font-black text-black">Post a Job</Link>
+                <Link to="/my-jobs" className="text-lg font-black text-black">Bảng điều khiển</Link>
+                <Link to="/post-job" className="text-lg font-black text-black">Đăng tin tuyển dụng</Link>
               </>
             )}
             <DropdownMenuSeparator />
-            <Link to="/profile" className="text-lg font-black text-black">Profile</Link>
-            <button onClick={handleLogout} className="text-lg font-black text-red-600 text-left">Log Out</button>
+            <Link to="/profile" className="text-lg font-black text-black">Hồ sơ cá nhân</Link>
+            <button onClick={handleLogout} className="text-lg font-black text-red-600 text-left">Đăng xuất</button>
           </nav>
         </div>
       )}

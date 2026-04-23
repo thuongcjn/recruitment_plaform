@@ -42,7 +42,7 @@ const AdminUsers = () => {
       const data = await getUsers();
       setUsers(data);
     } catch (err) {
-      console.error('Failed to fetch users');
+      console.error('Không thể tải danh sách người dùng');
     } finally {
       setLoading(false);
     }
@@ -54,7 +54,7 @@ const AdminUsers = () => {
       const result = await toggleBlockUser(userId);
       setUsers(users.map(u => u._id === userId ? { ...u, isBlocked: result.user.isBlocked } : u));
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to update user status');
+      alert(err.response?.data?.message || 'Cập nhật trạng thái người dùng thất bại');
     } finally {
       setProcessingId(null);
     }
@@ -68,7 +68,7 @@ const AdminUsers = () => {
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-20 space-y-4">
       <Loader2 className="animate-spin h-10 w-10 text-black" />
-      <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Loading user directory...</p>
+      <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Đang tải danh sách người dùng...</p>
     </div>
   );
 
@@ -78,17 +78,17 @@ const AdminUsers = () => {
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-2">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest mb-2 border border-blue-100">
-              <UserIcon className="h-3 w-3 mr-2" /> User Management
+              <UserIcon className="h-3 w-3 mr-2" /> Quản lý người dùng
             </div>
-            <h1 className="text-4xl font-black text-black tracking-tighter">Directory</h1>
-            <p className="text-gray-500 font-medium">Manage accounts, roles, and access controls.</p>
+            <h1 className="text-4xl font-black text-black tracking-tighter">Danh bạ</h1>
+            <p className="text-gray-500 font-medium">Quản lý tài khoản, vai trò và quyền truy cập.</p>
           </div>
           
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
             <div className="relative w-full sm:w-80 group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-black transition-colors" />
               <Input 
-                placeholder="Search by name or email..." 
+                placeholder="Tìm kiếm theo tên hoặc email..." 
                 className="pl-12 h-12 rounded-2xl border-none shadow-sm shadow-gray-200/50 bg-white focus-visible:ring-black font-medium"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -102,10 +102,10 @@ const AdminUsers = () => {
             <Table>
               <TableHeader className="bg-gray-50/50">
                 <TableRow className="border-gray-100 hover:bg-transparent">
-                  <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6 pl-8">User Info</TableHead>
-                  <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6">Role</TableHead>
-                  <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6">Status</TableHead>
-                  <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6 text-right pr-8">Actions</TableHead>
+                  <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6 pl-8">Thông tin người dùng</TableHead>
+                  <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6">Vai trò</TableHead>
+                  <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6">Trạng thái</TableHead>
+                  <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6 text-right pr-8">Hành động</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -135,17 +135,19 @@ const AdminUsers = () => {
                             user.role === 'recruiter' ? 'bg-purple-50 text-purple-600' : 
                             'bg-blue-50 text-blue-600'}`}
                       >
-                        {user.role}
+                        {user.role === 'admin' ? 'Quản trị viên' : 
+                          user.role === 'recruiter' ? 'Nhà tuyển dụng' : 
+                          'Ứng viên'}
                       </Badge>
                     </TableCell>
                     <TableCell className="py-6">
                       {user.isBlocked ? (
                         <div className="flex items-center gap-2 text-red-600 font-black text-xs uppercase tracking-widest">
-                          <Ban className="h-4 w-4" /> Blocked
+                          <Ban className="h-4 w-4" /> Đã chặn
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 text-green-600 font-black text-xs uppercase tracking-widest">
-                          <CheckCircle className="h-4 w-4" /> Active
+                          <CheckCircle className="h-4 w-4" /> Hoạt động
                         </div>
                       )}
                     </TableCell>
@@ -175,13 +177,13 @@ const AdminUsers = () => {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="rounded-2xl p-2 w-48 shadow-2xl border-gray-100">
-                              <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-gray-400 px-3 py-2">Quick Actions</DropdownMenuLabel>
+                              <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-gray-400 px-3 py-2">Thao tác nhanh</DropdownMenuLabel>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem className="rounded-xl py-2.5 font-bold text-xs cursor-pointer">
-                                <Mail className="mr-2 h-4 w-4" /> Send Email
+                                <Mail className="mr-2 h-4 w-4" /> Gửi Email
                               </DropdownMenuItem>
                               <DropdownMenuItem className="rounded-xl py-2.5 font-bold text-xs cursor-pointer">
-                                <Calendar className="mr-2 h-4 w-4" /> View Activity
+                                <Calendar className="mr-2 h-4 w-4" /> Xem hoạt động
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem 
@@ -189,9 +191,9 @@ const AdminUsers = () => {
                                 onClick={() => handleToggleBlock(user._id)}
                               >
                                 {user.isBlocked ? (
-                                  <><CheckCircle className="mr-2 h-4 w-4" /> Restore Access</>
+                                  <><CheckCircle className="mr-2 h-4 w-4" /> Khôi phục truy cập</>
                                 ) : (
-                                  <><Ban className="mr-2 h-4 w-4" /> Restrict Access</>
+                                  <><Ban className="mr-2 h-4 w-4" /> Chặn truy cập</>
                                 )}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -199,7 +201,7 @@ const AdminUsers = () => {
                         </div>
                       )}
                       {user.role === 'admin' && (
-                        <Badge variant="outline" className="rounded-full text-[10px] font-black text-gray-300 uppercase tracking-widest border-gray-100">System Protected</Badge>
+                        <Badge variant="outline" className="rounded-full text-[10px] font-black text-gray-300 uppercase tracking-widest border-gray-100">Bảo vệ hệ thống</Badge>
                       )}
                     </TableCell>
                   </TableRow>
@@ -213,8 +215,8 @@ const AdminUsers = () => {
                   <UserIcon className="h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-black">No users found</h3>
-                  <p className="text-gray-400 font-medium">Try adjusting your search filters.</p>
+                  <h3 className="text-xl font-black text-black">Không tìm thấy người dùng nào</h3>
+                  <p className="text-gray-400 font-medium">Hãy thử điều chỉnh bộ lọc tìm kiếm của bạn.</p>
                 </div>
               </div>
             )}

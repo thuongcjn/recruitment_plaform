@@ -30,7 +30,7 @@ const ViewApplicants = () => {
       setJob(jobData.data);
       setApplications(appData.data);
     } catch (err) {
-      setError('Failed to fetch applicants');
+      setError('Không thể tải danh sách ứng viên');
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,7 @@ const ViewApplicants = () => {
         app._id === applicationId ? { ...app, status: newStatus } : app
       ));
     } catch (err) {
-      alert('Failed to update status');
+      alert('Cập nhật trạng thái thất bại');
     } finally {
       setUpdatingId(null);
     }
@@ -59,10 +59,19 @@ const ViewApplicants = () => {
     }
   };
 
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case 'accepted': return 'Chấp nhận';
+      case 'rejected': return 'Từ chối';
+      case 'reviewed': return 'Đã xem hồ sơ';
+      default: return 'Đang chờ';
+    }
+  };
+
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-20 space-y-4">
       <Loader2 className="animate-spin h-10 w-10 text-black" />
-      <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Loading applicants...</p>
+      <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Đang tải danh sách ứng viên...</p>
     </div>
   );
 
@@ -72,12 +81,12 @@ const ViewApplicants = () => {
         <div className="flex items-center justify-between mb-8">
           <div className="space-y-1">
             <Link to="/my-jobs" className="text-sm font-bold text-gray-500 hover:text-black flex items-center gap-1 mb-2">
-              <ArrowLeft className="h-4 w-4" /> Back to Jobs
+              <ArrowLeft className="h-4 w-4" /> Quay lại quản lý tin
             </Link>
-            <h1 className="text-3xl font-black text-black tracking-tight">Applicants</h1>
-            <p className="text-gray-500 font-medium">Reviewing candidates for <span className="text-black font-bold">{job?.title}</span></p>
+            <h1 className="text-3xl font-black text-black tracking-tight">Danh sách ứng viên</h1>
+            <p className="text-gray-500 font-medium">Đang xem xét ứng viên cho vị trí <span className="text-black font-bold">{job?.title}</span></p>
           </div>
-          <Badge className="bg-black text-white px-4 py-1.5 rounded-full">{applications.length} Applied</Badge>
+          <Badge className="bg-black text-white px-4 py-1.5 rounded-full">{applications.length} Đã ứng tuyển</Badge>
         </div>
 
         {error && <Alert variant="destructive" className="mb-6"><AlertDescription>{error}</AlertDescription></Alert>}
@@ -88,8 +97,8 @@ const ViewApplicants = () => {
               <div className="h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto text-gray-300">
                 <User className="h-8 w-8" />
               </div>
-              <h2 className="text-xl font-bold text-black">No applicants yet</h2>
-              <p className="text-gray-500 text-sm">Applications for this position will appear here once candidates apply.</p>
+              <h2 className="text-xl font-bold text-black">Chưa có ứng viên nào</h2>
+              <p className="text-gray-500 text-sm">Đơn ứng tuyển cho vị trí này sẽ xuất hiện tại đây khi có ứng viên nộp hồ sơ.</p>
             </div>
           </Card>
         ) : (
@@ -104,14 +113,19 @@ const ViewApplicants = () => {
                         <div className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center text-black font-black text-2xl border-4 border-white shadow-sm">
                           {app.candidate.fullName?.[0]}
                         </div>
-                        <div className="space-y-2">
-                          <h2 className="text-2xl font-black text-black leading-tight">{app.candidate.fullName}</h2>
+                        <div className="space-y-2 flex-1">
+                          <Link to={`/candidate/${app.candidate._id}`} className="inline-block group">
+                            <h2 className="text-2xl font-black text-black leading-tight group-hover:text-blue-600 transition-colors flex items-center gap-2">
+                              {app.candidate.fullName}
+                              <ExternalLink className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </h2>
+                          </Link>
                           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
                             <div className="flex items-center gap-2 text-sm font-bold text-gray-500">
                               <Mail className="h-4 w-4" /> {app.candidate.email}
                             </div>
                             <div className="flex items-center gap-2 text-sm font-bold text-gray-500">
-                              <Clock className="h-4 w-4" /> Applied {new Date(app.createdAt).toLocaleDateString()}
+                              <Clock className="h-4 w-4" /> Đã nộp ngày {new Date(app.createdAt).toLocaleDateString('vi-VN')}
                             </div>
                           </div>
                         </div>
@@ -122,7 +136,7 @@ const ViewApplicants = () => {
                     <div className="lg:w-1/3 p-8 flex flex-col sm:flex-row lg:flex-col gap-4">
                       <Button asChild variant="outline" className="w-full border-gray-200 hover:bg-gray-50 rounded-xl font-bold">
                         <a href={app.resume} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2">
-                          <FileText className="h-4 w-4" /> View Full CV <ExternalLink className="h-3 w-3" />
+                          <FileText className="h-4 w-4" /> Xem CV đầy đủ <ExternalLink className="h-3 w-3" />
                         </a>
                       </Button>
                       
@@ -134,13 +148,13 @@ const ViewApplicants = () => {
                             disabled={updatingId === app._id}
                           >
                             <SelectTrigger className={`h-11 rounded-xl font-black uppercase tracking-widest text-[10px] ${getStatusColor(app.status)}`}>
-                              <SelectValue />
+                              <SelectValue>{getStatusLabel(app.status)}</SelectValue>
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="pending">Pending</SelectItem>
-                              <SelectItem value="reviewed">Reviewed</SelectItem>
-                              <SelectItem value="accepted">Accepted</SelectItem>
-                              <SelectItem value="rejected">Rejected</SelectItem>
+                              <SelectItem value="pending">Đang chờ</SelectItem>
+                              <SelectItem value="reviewed">Đã xem hồ sơ</SelectItem>
+                              <SelectItem value="accepted">Chấp nhận</SelectItem>
+                              <SelectItem value="rejected">Từ chối</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -151,7 +165,7 @@ const ViewApplicants = () => {
 
                   {app.coverLetter && (
                     <div className="bg-gray-50/50 p-6 px-8 border-t border-gray-100">
-                      <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Cover Letter / Note</p>
+                      <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Thư giới thiệu / Ghi chú</p>
                       <p className="text-sm text-gray-600 italic">"{app.coverLetter}"</p>
                     </div>
                   )}

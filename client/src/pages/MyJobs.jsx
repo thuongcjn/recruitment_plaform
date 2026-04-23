@@ -29,6 +29,16 @@ import {
 } from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
 
+const getTypeLabel = (type) => {
+  switch (type) {
+    case 'Internship': return 'Thực tập';
+    case 'Part-time': return 'Bán thời gian';
+    case 'Full-time': return 'Toàn thời gian';
+    case 'Freelance': return 'Tự do';
+    default: return type;
+  }
+};
+
 const MyJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [stats, setStats] = useState({ totalJobs: 0, activeJobs: 0, totalApplicants: 0 });
@@ -49,24 +59,24 @@ const MyJobs = () => {
       setJobs(jobsData.data);
       setStats(statsData.data);
     } catch (err) {
-      setError('Failed to fetch dashboard data');
+      setError('Không thể tải dữ liệu bảng điều khiển');
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this job?')) return;
+    if (!window.confirm('Bạn có chắc chắn muốn xóa tin tuyển dụng này không?')) return;
     try {
       await deleteJob(id);
       setJobs(jobs.filter(job => job._id !== id));
       // Refresh stats
       const statsData = await getRecruiterStats();
       setStats(statsData.data);
-      setSuccess('Job deleted successfully');
+      setSuccess('Đã xóa tin tuyển dụng thành công');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError('Failed to delete job');
+      setError('Xóa tin tuyển dụng thất bại');
     }
   };
 
@@ -79,14 +89,14 @@ const MyJobs = () => {
       const statsData = await getRecruiterStats();
       setStats(statsData.data);
     } catch (err) {
-      setError('Failed to update job status');
+      setError('Cập nhật trạng thái thất bại');
     }
   };
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-20 space-y-4">
       <Loader2 className="animate-spin h-10 w-10 text-black" />
-      <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Loading dashboard...</p>
+      <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Đang tải bảng điều khiển...</p>
     </div>
   );
 
@@ -95,32 +105,32 @@ const MyJobs = () => {
       <div className="grid gap-4 md:grid-cols-3 md:gap-8">
         <Card className="border-none shadow-sm rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-black uppercase tracking-widest text-gray-500">Total Jobs</CardTitle>
+            <CardTitle className="text-sm font-black uppercase tracking-widest text-gray-500">Tổng tin đăng</CardTitle>
             <Briefcase className="h-4 w-4 text-black" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-black text-black">{stats.totalJobs}</div>
-            <p className="text-xs text-gray-400 font-bold mt-1">ALL TIME POSTINGS</p>
+            <p className="text-xs text-gray-400 font-bold mt-1">TẤT CẢ THỜI GIAN</p>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-black uppercase tracking-widest text-gray-500">Active Jobs</CardTitle>
+            <CardTitle className="text-sm font-black uppercase tracking-widest text-gray-500">Đang hoạt động</CardTitle>
             <Activity className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-black text-black">{stats.activeJobs}</div>
-            <p className="text-xs text-green-600 font-bold mt-1">LIVE ON FEED</p>
+            <p className="text-xs text-green-600 font-bold mt-1">ĐANG HIỂN THỊ</p>
           </CardContent>
         </Card>
         <Card className="border-none shadow-sm rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-black uppercase tracking-widest text-gray-500">Total Applicants</CardTitle>
+            <CardTitle className="text-sm font-black uppercase tracking-widest text-gray-500">Tổng ứng viên</CardTitle>
             <Users className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-black text-black">{stats.totalApplicants}</div>
-            <p className="text-xs text-blue-600 font-bold mt-1">CANDIDATES INTERESTED</p>
+            <p className="text-xs text-blue-600 font-bold mt-1">LƯỢT QUAN TÂM</p>
           </CardContent>
         </Card>
       </div>
@@ -129,28 +139,28 @@ const MyJobs = () => {
         <Card className="border-none shadow-sm rounded-2xl overflow-hidden">
           <CardHeader className="flex flex-row items-center bg-white border-b p-6">
             <div className="grid gap-1">
-              <CardTitle className="text-xl font-black text-black">Jobs Management</CardTitle>
-              <CardDescription className="font-medium">Maintain and monitor your active job listings.</CardDescription>
+              <CardTitle className="text-xl font-black text-black">Quản lý tin tuyển dụng</CardTitle>
+              <CardDescription className="font-medium">Theo dõi và cập nhật các tin tuyển dụng của bạn.</CardDescription>
             </div>
             <Button asChild size="sm" className="ml-auto gap-2 bg-black hover:bg-gray-800 text-white rounded-xl px-6 font-bold">
               <Link to="/post-job">
                 <Plus className="h-4 w-4" />
-                Post New Job
+                Đăng tin mới
               </Link>
             </Button>
           </CardHeader>
           <CardContent className="p-0">
             {jobs.length === 0 ? (
-              <div className="text-center py-20 text-gray-400 font-bold uppercase tracking-widest text-sm">No jobs posted yet.</div>
+              <div className="text-center py-20 text-gray-400 font-bold uppercase tracking-widest text-sm">Bạn chưa đăng tin tuyển dụng nào.</div>
             ) : (
               <Table>
                 <TableHeader className="bg-gray-50/50">
                   <TableRow className="border-none">
-                    <TableHead className="font-black text-black uppercase tracking-tighter text-xs p-6">Job Details</TableHead>
-                    <TableHead className="hidden sm:table-cell font-black text-black uppercase tracking-tighter text-xs">Applicants</TableHead>
-                    <TableHead className="hidden sm:table-cell font-black text-black uppercase tracking-tighter text-xs text-center">Live Status</TableHead>
-                    <TableHead className="hidden md:table-cell font-black text-black uppercase tracking-tighter text-xs">Posted Date</TableHead>
-                    <TableHead className="text-right font-black text-black uppercase tracking-tighter text-xs p-6">Actions</TableHead>
+                    <TableHead className="font-black text-black uppercase tracking-tighter text-xs p-6">Chi tiết công việc</TableHead>
+                    <TableHead className="hidden sm:table-cell font-black text-black uppercase tracking-tighter text-xs">Ứng viên</TableHead>
+                    <TableHead className="hidden sm:table-cell font-black text-black uppercase tracking-tighter text-xs text-center">Trạng thái</TableHead>
+                    <TableHead className="hidden md:table-cell font-black text-black uppercase tracking-tighter text-xs">Ngày đăng</TableHead>
+                    <TableHead className="text-right font-black text-black uppercase tracking-tighter text-xs p-6">Thao tác</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -159,7 +169,7 @@ const MyJobs = () => {
                       <TableCell className="p-6">
                         <div className="font-black text-black text-base">{job.title}</div>
                         <div className="text-xs font-bold text-gray-400 uppercase tracking-tight flex items-center gap-2 mt-1">
-                          {job.type} <span className="w-1 h-1 bg-gray-300 rounded-full"></span> {job.location}
+                          {getTypeLabel(job.type)} <span className="w-1 h-1 bg-gray-300 rounded-full"></span> {job.location}
                         </div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
@@ -175,12 +185,12 @@ const MyJobs = () => {
                             onCheckedChange={() => handleToggleStatus(job._id, job.status)}
                           />
                           <Badge className={job.status === 'open' ? 'bg-green-50 text-green-700 hover:bg-green-50 border-green-100' : 'bg-gray-100 text-gray-500 border-gray-200'}>
-                            {job.status.toUpperCase()}
+                            {job.status === 'open' ? 'ĐANG MỞ' : 'ĐÃ ĐÓNG'}
                           </Badge>
                         </div>
                       </TableCell>
                       <TableCell className="hidden md:table-cell text-sm font-bold text-gray-500">
-                        {new Date(job.createdAt).toLocaleDateString()}
+                        {new Date(job.createdAt).toLocaleDateString('vi-VN')}
                       </TableCell>
                       <TableCell className="text-right p-6">
                         <DropdownMenu>
@@ -190,21 +200,21 @@ const MyJobs = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-56 p-2 rounded-xl shadow-2xl border-gray-100">
-                            <DropdownMenuLabel className="text-xs font-black uppercase tracking-widest text-gray-400 p-2">Job Actions</DropdownMenuLabel>
+                            <DropdownMenuLabel className="text-xs font-black uppercase tracking-widest text-gray-400 p-2">Thao tác</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild className="rounded-lg cursor-pointer py-3">
                               <Link to={`/applicants/${job._id}`} className="flex items-center font-bold text-blue-600">
-                                <Users className="mr-3 h-4 w-4" /> View Applicants
+                                <Users className="mr-3 h-4 w-4" /> Xem ứng viên
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild className="rounded-lg cursor-pointer py-3">
                               <Link to={`/jobs/${job._id}`} className="flex items-center font-bold">
-                                <Eye className="mr-3 h-4 w-4" /> Preview Public
+                                <Eye className="mr-3 h-4 w-4" /> Xem trước
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild className="rounded-lg cursor-pointer py-3">
                               <Link to={`/edit-job/${job._id}`} className="flex items-center font-bold">
-                                <Edit className="mr-3 h-4 w-4" /> Edit Details
+                                <Edit className="mr-3 h-4 w-4" /> Chỉnh sửa
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
@@ -212,7 +222,7 @@ const MyJobs = () => {
                               className="rounded-lg cursor-pointer py-3 text-red-600 focus:text-red-600 focus:bg-red-50"
                               onClick={() => handleDelete(job._id)}
                             >
-                              <Trash2 className="mr-3 h-4 w-4" /> Delete Permanently
+                              <Trash2 className="mr-3 h-4 w-4" /> Xóa vĩnh viễn
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

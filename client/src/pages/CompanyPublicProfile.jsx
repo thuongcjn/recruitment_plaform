@@ -26,7 +26,7 @@ const CompanyPublicProfile = () => {
         getPublicProfile(id),
         getJobs({ company: id }) // This requires the getJobs API to handle company filter
       ]);
-      
+
       setCompany(profileData.data);
       // Filter jobs from this company if the backend didn't do it correctly
       // (My backend getJobs actually handles category/type but I should add company filter)
@@ -41,14 +41,14 @@ const CompanyPublicProfile = () => {
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-20 space-y-4">
       <Loader2 className="animate-spin h-10 w-10 text-blue-600" />
-      <p className="text-gray-500 font-medium">Loading company profile...</p>
+      <p className="text-gray-500 font-medium">Đang tải hồ sơ công ty...</p>
     </div>
   );
 
   if (error || !company) return (
     <div className="container mx-auto p-10 text-center">
-      <Alert variant="destructive" className="max-w-md mx-auto mb-6"><AlertDescription>{error || 'Company not found'}</AlertDescription></Alert>
-      <Button onClick={() => navigate('/')}><ArrowLeft className="h-4 w-4 mr-2" /> Back to Home</Button>
+      <Alert variant="destructive" className="max-w-md mx-auto mb-6"><AlertDescription>{error || 'Không tìm thấy công ty'}</AlertDescription></Alert>
+      <Button onClick={() => navigate('/')}><ArrowLeft className="h-4 w-4 mr-2" /> Quay lại Trang chủ</Button>
     </div>
   );
 
@@ -58,7 +58,7 @@ const CompanyPublicProfile = () => {
     <div className="min-h-screen bg-gray-50/50 pb-20">
       {/* Hero Header */}
       <div className="bg-white border-b relative">
-        <div className="h-48 bg-gradient-to-r from-blue-600 to-indigo-700"></div>
+        <div className="h-48 bg-gradient-to-r from-[#000000] via-[#0b1219] to-[#152331]"></div>
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-end -mt-12 mb-8 space-y-4 md:space-y-0 md:space-x-8">
             <div className="h-32 w-32 rounded-3xl bg-white shadow-xl border-4 border-white flex items-center justify-center overflow-hidden shrink-0">
@@ -77,7 +77,7 @@ const CompanyPublicProfile = () => {
                     <Globe className="h-4 w-4 mr-1.5" /> {profile.website.replace(/^https?:\/\//, '')}
                   </a>
                 )}
-                <div className="flex items-center"><Briefcase className="h-4 w-4 mr-1.5" /> {jobs.length} Open Positions</div>
+                <div className="flex items-center"><Briefcase className="h-4 w-4 mr-1.5" /> {jobs.length} Vị trí đang tuyển</div>
               </div>
             </div>
           </div>
@@ -89,20 +89,20 @@ const CompanyPublicProfile = () => {
         <div className="lg:col-span-8 space-y-8">
           <Card className="border-none shadow-sm">
             <CardHeader>
-              <CardTitle>About {profile?.companyName || company.fullName}</CardTitle>
+              <CardTitle>Về {profile?.companyName || company.fullName}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-gray-600 leading-relaxed whitespace-pre-wrap text-lg">
-                {profile?.description || 'No description provided by the company.'}
+                {profile?.description || 'Công ty chưa cập nhật mô tả.'}
               </div>
             </CardContent>
           </Card>
 
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-900 px-1">Open Positions</h2>
+            <h2 className="text-2xl font-bold text-gray-900 px-1">Vị trí đang tuyển</h2>
             {jobs.length === 0 ? (
               <Card className="p-12 text-center border-dashed">
-                <p className="text-gray-500">No open positions at the moment.</p>
+                <p className="text-gray-500">Hiện chưa có vị trí nào đang tuyển.</p>
               </Card>
             ) : (
               jobs.map(job => (
@@ -119,7 +119,7 @@ const CompanyPublicProfile = () => {
                         </div>
                       </div>
                       <Button variant="ghost" size="sm" className="text-blue-600">
-                        Details <ExternalLink className="h-4 w-4 ml-2" />
+                        Chi tiết <ExternalLink className="h-4 w-4 ml-2" />
                       </Button>
                     </CardContent>
                   </Link>
@@ -133,24 +133,24 @@ const CompanyPublicProfile = () => {
         <div className="lg:col-span-4">
           <Card className="border-none shadow-sm sticky top-24">
             <CardHeader>
-              <CardTitle>Quick Facts</CardTitle>
+              <CardTitle>Thông tin nhanh</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                <span className="text-gray-500 text-sm">Industry</span>
-                <span className="font-medium text-sm">Tech & Software</span>
+                <span className="text-gray-500 text-sm">Lĩnh vực</span>
+                <span className="font-medium text-sm">Công nghệ & Phần mềm</span>
               </div>
               <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                <span className="text-gray-500 text-sm">Active Jobs</span>
+                <span className="text-gray-500 text-sm">Công việc đang tuyển</span>
                 <span className="font-medium text-sm">{jobs.length}</span>
               </div>
               <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                <span className="text-gray-500 text-sm">Member Since</span>
+                <span className="text-gray-500 text-sm">Thành viên từ</span>
                 <span className="font-medium text-sm">{new Date(company.createdAt).getFullYear()}</span>
               </div>
               <Button asChild className="w-full mt-4 bg-blue-600 hover:bg-blue-700">
                 <a href={profile?.website} target="_blank" rel="noreferrer">
-                  Official Website <ExternalLink className="h-4 w-4 ml-2" />
+                  Trang web chính thức <ExternalLink className="h-4 w-4 ml-2" />
                 </a>
               </Button>
             </CardContent>

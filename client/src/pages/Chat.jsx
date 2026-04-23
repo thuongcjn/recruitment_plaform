@@ -22,6 +22,7 @@ const Chat = () => {
   const [activeConversation, setActiveConversation] = useState(null);
   
   const scrollRef = useRef();
+  const messagesEndRef = useRef();
 
   // Fetch conversations
   useEffect(() => {
@@ -80,9 +81,14 @@ const Chat = () => {
     return () => socket?.off('getMessage');
   }, [socket, activeConversation]);
 
-  // Scroll to bottom
+  // Cuộn xuống cuối
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTo({
+        top: messagesEndRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   }, [messages]);
 
   const handleSendMessage = async (e) => {
@@ -131,11 +137,11 @@ const Chat = () => {
         {/* Sidebar - Conversations List */}
         <div className={`w-full md:w-80 lg:w-96 border-r flex flex-col ${id ? 'hidden md:flex' : 'flex'}`}>
           <div className="p-6 border-b">
-            <h1 className="text-2xl font-black tracking-tighter mb-4">Messages</h1>
+            <h1 className="text-2xl font-black tracking-tighter mb-4">Tin nhắn</h1>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input 
-                placeholder="Search chats..." 
+                placeholder="Tìm kiếm cuộc trò chuyện..." 
                 className="pl-10 bg-gray-50 border-none rounded-xl"
               />
             </div>
@@ -147,8 +153,8 @@ const Chat = () => {
                 <div className="bg-gray-50 rounded-full h-16 w-16 flex items-center justify-center mx-auto mb-4">
                   <MessageSquare className="h-8 w-8 text-gray-300" />
                 </div>
-                <p className="text-gray-500 font-bold">No messages yet</p>
-                <p className="text-xs text-gray-400 mt-1">Start chatting with recruiters or candidates!</p>
+                <p className="text-gray-500 font-bold">Chưa có tin nhắn nào</p>
+                <p className="text-xs text-gray-400 mt-1">Bắt đầu trò chuyện với nhà tuyển dụng hoặc ứng viên!</p>
               </div>
             ) : (
               conversations.map((conv) => {
@@ -173,7 +179,7 @@ const Chat = () => {
                         </span>
                       </div>
                       <p className="text-xs text-gray-500 truncate mt-0.5">
-                        {conv.lastMessage?.text || 'No messages yet'}
+                        {conv.lastMessage?.text || 'Chưa có tin nhắn'}
                       </p>
                     </div>
                   </div>
@@ -207,7 +213,7 @@ const Chat = () => {
                   <div>
                     <h2 className="font-black text-sm">{getPartner(activeConversation)?.fullName}</h2>
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                      {getPartner(activeConversation)?.role}
+                      {getPartner(activeConversation)?.role === 'recruiter' ? 'Nhà tuyển dụng' : 'Ứng viên'}
                     </p>
                   </div>
                 </div>
@@ -217,7 +223,10 @@ const Chat = () => {
               </div>
 
               {/* Messages Area */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50/50">
+              <div 
+                ref={messagesEndRef}
+                className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50/50"
+              >
                 {messages.map((msg, index) => {
                   const isMine = msg.sender === user._id || msg.sender?._id === user._id;
                   return (
@@ -238,7 +247,7 @@ const Chat = () => {
                     </div>
                   );
                 })}
-                <div ref={scrollRef} />
+                <div />
               </div>
 
               {/* Input Area */}
@@ -247,7 +256,7 @@ const Chat = () => {
                   <Input 
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Type a message..." 
+                    placeholder="Nhập tin nhắn..." 
                     className="flex-1 rounded-xl bg-gray-50 border-none focus-visible:ring-black"
                   />
                   <Button 
@@ -266,9 +275,9 @@ const Chat = () => {
               <div className="bg-gray-50 rounded-full h-24 w-24 flex items-center justify-center mb-6">
                 <MessageSquare className="h-12 w-12 text-gray-200" />
               </div>
-              <h2 className="text-xl font-black tracking-tighter">Your Messages</h2>
+              <h2 className="text-xl font-black tracking-tighter">Tin nhắn của bạn</h2>
               <p className="text-gray-500 max-w-xs mt-2 font-medium">
-                Select a conversation from the sidebar to start chatting.
+                Chọn một cuộc hội thoại từ danh sách bên trái để bắt đầu trò chuyện.
               </p>
             </div>
           )}

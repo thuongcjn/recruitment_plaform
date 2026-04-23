@@ -27,7 +27,7 @@ const Login = () => {
       setAuth(data);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to login');
+      setError(err.response?.data?.message || 'Đăng nhập thất bại');
     } finally {
       setIsLoading(false);
     }
@@ -37,8 +37,8 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Login to Hiretify</CardTitle>
-          <CardDescription>Enter your email and password to access your account</CardDescription>
+          <CardTitle className="text-2xl font-bold">Đăng nhập vào Hiretify</CardTitle>
+          <CardDescription>Nhập email và mật khẩu để truy cập tài khoản của bạn</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -60,7 +60,7 @@ const Login = () => {
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Mật khẩu</Label>
               </div>
               <Input
                 id="password"
@@ -73,12 +73,12 @@ const Login = () => {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Logging in...' : 'Login'}
+              {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
             </Button>
             <p className="text-sm text-center text-gray-600">
-              Don't have an account?{' '}
+              Chưa có tài khoản?{' '}
               <Link to="/register" className="text-blue-600 hover:underline">
-                Register
+                Đăng ký ngay
               </Link>
             </p>
           </CardFooter>

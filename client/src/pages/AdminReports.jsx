@@ -59,7 +59,7 @@ const AdminReports = () => {
       const data = await getReports();
       setReports(data);
     } catch (err) {
-      setError('Failed to fetch reports');
+      setError('Không thể tải danh sách báo cáo');
     } finally {
       setLoading(false);
     }
@@ -69,11 +69,11 @@ const AdminReports = () => {
     setProcessingId(id);
     try {
       await deleteReport(id);
-      setSuccess('Report dismissed successfully');
+      setSuccess('Đã hủy bỏ báo cáo thành công');
       setReports(reports.filter(r => r._id !== id));
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError('Failed to dismiss report');
+      setError('Không thể hủy bỏ báo cáo');
     } finally {
       setProcessingId(null);
     }
@@ -83,12 +83,12 @@ const AdminReports = () => {
     setProcessingId(reportId);
     try {
       await deleteJobByAdmin(jobId);
-      setSuccess('Job and all related reports deleted');
+      setSuccess('Đã xóa tin tuyển dụng và tất cả báo cáo liên quan');
       setReports(reports.filter(r => r.jobId?._id !== jobId));
       setIsDetailOpen(false);
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError('Failed to delete job');
+      setError('Không thể xóa tin tuyển dụng');
     } finally {
       setProcessingId(null);
     }
@@ -102,7 +102,7 @@ const AdminReports = () => {
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-20 space-y-4">
       <Loader2 className="animate-spin h-10 w-10 text-black" />
-      <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Loading reports...</p>
+      <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Đang tải danh sách báo cáo...</p>
     </div>
   );
 
@@ -112,19 +112,19 @@ const AdminReports = () => {
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-2">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-red-50 text-red-600 text-[10px] font-black uppercase tracking-widest mb-2 border border-red-100">
-              <Flag className="h-3 w-3 mr-2" /> Admin Review
+              <Flag className="h-3 w-3 mr-2" /> Xem xét quản trị
             </div>
-            <h1 className="text-4xl font-black text-black tracking-tighter">Job Reports</h1>
-            <p className="text-gray-500 font-medium">Review flagged postings and maintain platform integrity.</p>
+            <h1 className="text-4xl font-black text-black tracking-tighter">Báo cáo tuyển dụng</h1>
+            <p className="text-gray-500 font-medium">Xem xét các bài đăng bị gắn cờ và duy trì tính minh bạch của nền tảng.</p>
           </div>
 
           <div className="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
             <div className="px-4 py-2 text-center border-r border-gray-100">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Reports</p>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Báo cáo</p>
               <p className="text-xl font-black text-black">{reports.length}</p>
             </div>
             <div className="px-4 py-2 text-center">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Active Jobs</p>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tin đang mở</p>
               <p className="text-xl font-black text-green-600">{Array.from(new Set(reports.map(r => r.jobId?._id).filter(id => id))).length}</p>
             </div>
           </div>
@@ -141,18 +141,18 @@ const AdminReports = () => {
                   <CheckCircle className="h-10 w-10" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-black tracking-tight">All Clear!</h3>
-                  <p className="text-gray-500 font-medium">No pending reports at the moment.</p>
+                  <h3 className="text-2xl font-black text-black tracking-tight">Đã xử lý hết!</h3>
+                  <p className="text-gray-500 font-medium">Hiện không có báo cáo nào đang chờ xử lý.</p>
                 </div>
               </div>
             ) : (
               <Table>
                 <TableHeader className="bg-gray-50/50">
                   <TableRow className="border-gray-100 hover:bg-transparent">
-                    <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6 pl-8">Job Posting</TableHead>
-                    <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6">Reporter</TableHead>
-                    <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6">Reason</TableHead>
-                    <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6 pr-8 text-right">Actions</TableHead>
+                    <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6 pl-8">Tin tuyển dụng</TableHead>
+                    <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6">Người báo cáo</TableHead>
+                    <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6">Lý do</TableHead>
+                    <TableHead className="font-black text-gray-400 uppercase tracking-widest text-[10px] py-6 pr-8 text-right">Hành động</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -165,12 +165,12 @@ const AdminReports = () => {
                               {report.jobId.title}
                             </div>
                             <div className="flex items-center text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                              {report.jobId.company?.fullName || 'Unknown Company'}
+                              {report.jobId.company?.fullName || 'Công ty không xác định'}
                             </div>
                           </div>
                         ) : (
                           <span className="text-gray-400 font-bold italic text-sm flex items-center gap-2">
-                            <Trash2 className="h-3 w-3" /> Job Deleted
+                            <Trash2 className="h-3 w-3" /> Tin đã bị xóa
                           </span>
                         )}
                       </TableCell>
@@ -182,7 +182,7 @@ const AdminReports = () => {
                             </AvatarFallback>
                           </Avatar>
                           <div className="space-y-0.5">
-                            <p className="font-bold text-xs text-black">{report.reporterId?.fullName || 'Unknown'}</p>
+                            <p className="font-bold text-xs text-black">{report.reporterId?.fullName || 'Không xác định'}</p>
                             <p className="text-[10px] text-gray-400 font-medium">{report.reporterId?.email}</p>
                           </div>
                         </div>
@@ -202,7 +202,7 @@ const AdminReports = () => {
                               onClick={() => openJobDetail(report.jobId)}
                               className="rounded-xl font-bold text-[10px] uppercase tracking-widest h-9 border-gray-200 hover:bg-black hover:text-white transition-all"
                             >
-                              <Eye className="h-3 w-3 mr-2" /> Details
+                              <Eye className="h-3 w-3 mr-2" /> Chi tiết
                             </Button>
                           )}
 
@@ -213,7 +213,7 @@ const AdminReports = () => {
                             disabled={processingId === report._id}
                             className="rounded-xl font-bold text-[10px] uppercase tracking-widest h-9 text-gray-400"
                           >
-                            {processingId === report._id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Dismiss'}
+                            {processingId === report._id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Hủy bỏ'}
                           </Button>
 
                           {report.jobId && (
@@ -224,23 +224,23 @@ const AdminReports = () => {
                                   size="sm"
                                   className="rounded-xl font-bold text-[10px] uppercase tracking-widest h-9 bg-red-600 hover:bg-red-700 shadow-lg shadow-red-100"
                                 >
-                                  Delete Job
+                                  Xóa tin
                                 </Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent className="rounded-3xl p-8">
                                 <AlertDialogHeader>
-                                  <AlertDialogTitle className="text-2xl font-black tracking-tighter">Confirm Deletion</AlertDialogTitle>
+                                  <AlertDialogTitle className="text-2xl font-black tracking-tighter">Xác nhận xóa</AlertDialogTitle>
                                   <AlertDialogDescription className="font-medium text-gray-500">
-                                    Are you sure you want to delete **"{report.jobId.title}"**? This will remove the job and all its reports permanently.
+                                    Bạn có chắc chắn muốn xóa **"{report.jobId.title}"**? Hành động này sẽ xóa vĩnh viễn tin tuyển dụng và tất cả báo cáo liên quan.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter className="gap-3 mt-6">
-                                  <AlertDialogCancel className="rounded-xl font-bold">Cancel</AlertDialogCancel>
+                                  <AlertDialogCancel className="rounded-xl font-bold">Hủy</AlertDialogCancel>
                                   <AlertDialogAction
                                     onClick={() => handleDeleteJob(report.jobId._id, report._id)}
                                     className="rounded-xl bg-red-600 hover:bg-red-700 font-bold"
                                   >
-                                    Delete Job
+                                    Xóa tin
                                   </AlertDialogAction>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
@@ -259,8 +259,8 @@ const AdminReports = () => {
 
       {/* Job Detail Modal */}
       <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-        <DialogTitle className="sr-only">Job detail</DialogTitle>
-        <DialogDescription className="sr-only">Job detail description</DialogDescription>
+        <DialogTitle className="sr-only">Chi tiết công việc</DialogTitle>
+        <DialogDescription className="sr-only">Mô tả chi tiết công việc</DialogDescription>
         <DialogContent className="max-w-4xl max-h-[90vh] p-0 rounded-3xl overflow-hidden border-none shadow-2xl bg-white">
           {selectedJob && (
             <div className="flex flex-col h-full">
@@ -287,7 +287,7 @@ const AdminReports = () => {
                       className="rounded-2xl font-black text-[10px] uppercase tracking-widest h-12 px-6"
                       onClick={() => handleDeleteJob(selectedJob._id, null)}
                     >
-                      Delete Job
+                      Xóa tin
                     </Button>
                   </div>
                 </div>
@@ -298,7 +298,7 @@ const AdminReports = () => {
                   <div className="md:col-span-2 space-y-10">
                     <section>
                       <h3 className="text-lg font-black text-black uppercase tracking-tight mb-4 flex items-center gap-2">
-                        <FileText className="h-5 w-5 text-gray-400" /> Job Description
+                        <FileText className="h-5 w-5 text-gray-400" /> Mô tả công việc
                       </h3>
                       <p className="text-gray-600 leading-relaxed font-medium whitespace-pre-line">{selectedJob.description}</p>
                     </section>
@@ -306,7 +306,7 @@ const AdminReports = () => {
                     {selectedJob.requirements?.length > 0 && (
                       <section>
                         <h3 className="text-lg font-black text-black uppercase tracking-tight mb-4 flex items-center gap-2">
-                          <ListChecks className="h-5 w-5 text-gray-400" /> Requirements
+                          <ListChecks className="h-5 w-5 text-gray-400" /> Yêu cầu
                         </h3>
                         <ul className="grid grid-cols-1 gap-3">
                           {selectedJob.requirements.map((req, i) => (
@@ -322,7 +322,7 @@ const AdminReports = () => {
                     {selectedJob.benefits?.length > 0 && (
                       <section>
                         <h3 className="text-lg font-black text-black uppercase tracking-tight mb-4 flex items-center gap-2">
-                          <Gift className="h-5 w-5 text-gray-400" /> Benefits
+                          <Gift className="h-5 w-5 text-gray-400" /> Quyền lợi
                         </h3>
                         <ul className="grid grid-cols-1 gap-3">
                           {selectedJob.benefits.map((benefit, i) => (
@@ -338,18 +338,18 @@ const AdminReports = () => {
 
                   <div className="space-y-8">
                     <div className="bg-gray-50 rounded-3xl p-6 space-y-6">
-                      <h4 className="font-black text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-4">Job Insights</h4>
+                      <h4 className="font-black text-[10px] text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-4">Thông tin thêm</h4>
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-gray-500 uppercase tracking-tighter">Posted On</span>
-                          <span className="text-xs font-black text-black">{new Date(selectedJob.createdAt).toLocaleDateString()}</span>
+                          <span className="text-xs font-bold text-gray-500 uppercase tracking-tighter">Ngày đăng</span>
+                          <span className="text-xs font-black text-black">{new Date(selectedJob.createdAt).toLocaleDateString('vi-VN')}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-gray-500 uppercase tracking-tighter">Applicants</span>
+                          <span className="text-xs font-bold text-gray-500 uppercase tracking-tighter">Số ứng viên</span>
                           <span className="text-xs font-black text-black">{selectedJob.applicantsCount}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-gray-500 uppercase tracking-tighter">Category</span>
+                          <span className="text-xs font-bold text-gray-500 uppercase tracking-tighter">Danh mục</span>
                           <Badge variant="secondary" className="text-[9px] font-black uppercase bg-white border border-gray-200">{selectedJob.category}</Badge>
                         </div>
                       </div>
@@ -358,10 +358,10 @@ const AdminReports = () => {
                     <div className="bg-blue-50/50 border border-blue-100 rounded-3xl p-6 space-y-4">
                       <div className="flex items-center gap-3">
                         <ShieldAlert className="h-5 w-5 text-blue-600" />
-                        <h4 className="font-black text-sm text-blue-600 tracking-tight">Admin Action</h4>
+                        <h4 className="font-black text-sm text-blue-600 tracking-tight">Hành động quản trị</h4>
                       </div>
                       <p className="text-[10px] font-medium text-blue-800/70 leading-relaxed uppercase tracking-widest">
-                        Review the content above carefully. If it violates platform terms (scam, offensive, illegal), delete the job. Otherwise, dismiss the report.
+                        Xem xét nội dung trên cẩn thận. Nếu vi phạm điều khoản nền tảng (lừa đảo, xúc phạm, bất hợp pháp), hãy xóa tin tuyển dụng. Nếu không, hãy hủy bỏ báo cáo.
                       </p>
                     </div>
                   </div>

@@ -53,59 +53,59 @@ const useFadeIn = () => {
 const FEATURES = [
   {
     icon: Search,
-    title: 'Smart Job Matching',
-    desc: 'AI-powered algorithms match you with the most relevant opportunities based on your skills and preferences.'
+    title: 'Gợi ý việc làm thông minh',
+    desc: 'Thuật toán AI kết nối bạn với những cơ hội phù hợp nhất dựa trên kỹ năng và sở thích của bạn.'
   },
   {
     icon: MessageSquare,
-    title: 'Real-time Chat',
-    desc: 'Connect directly with recruiters through our built-in messaging system. No more waiting for emails.'
+    title: 'Trò chuyện trực tiếp',
+    desc: 'Kết nối trực tiếp với nhà tuyển dụng qua hệ thống tin nhắn tích hợp. Không còn phải chờ đợi email.'
   },
   {
     icon: FileText,
-    title: 'CV Management',
-    desc: 'Upload and manage your CV with one click. Apply to jobs instantly without re-entering your information.'
+    title: 'Quản lý hồ sơ (CV)',
+    desc: 'Tải lên và quản lý CV chỉ với một cú nhấp chuột. Ứng tuyển tức thì không cần nhập lại thông tin.'
   },
   {
     icon: Bell,
-    title: 'Instant Notifications',
-    desc: 'Get real-time email alerts when your application status changes or a recruiter reaches out.'
+    title: 'Thông báo tức thời',
+    desc: 'Nhận thông báo email thời gian thực khi trạng thái ứng tuyển thay đổi hoặc có tin nhắn mới.'
   },
   {
     icon: Building2,
-    title: 'Company Profiles',
-    desc: 'Explore detailed company pages with descriptions, job listings, and team culture before you apply.'
+    title: 'Hồ sơ công ty',
+    desc: 'Khám phá các trang công ty chi tiết với mô tả, danh sách việc làm và văn hóa nhóm trước khi ứng tuyển.'
   },
   {
     icon: ClipboardCheck,
-    title: 'Application Tracking',
-    desc: 'Track every application from submission to decision. Know exactly where you stand at all times.'
+    title: 'Theo dõi ứng tuyển',
+    desc: 'Theo dõi mọi đơn ứng tuyển từ khi nộp đến khi có kết quả. Nắm bắt trạng thái mọi lúc.'
   }
 ];
 
 const STEPS = [
-  { num: '01', title: 'Create Your Profile', desc: 'Sign up and build your professional profile with skills, experience, and CV upload.' },
-  { num: '02', title: 'Discover Opportunities', desc: 'Browse curated job listings filtered by category, location, and salary range.' },
-  { num: '03', title: 'Get Hired', desc: 'Apply with one click, chat with recruiters, and land your dream position.' }
+  { num: '01', title: 'Tạo hồ sơ của bạn', desc: 'Đăng ký và xây dựng hồ sơ chuyên nghiệp với kỹ năng, kinh nghiệm và tải lên CV.' },
+  { num: '02', title: 'Khám phá cơ hội', desc: 'Duyệt các tin tuyển dụng được chọn lọc, lọc theo lĩnh vực, địa điểm và mức lương.' },
+  { num: '03', title: 'Được nhận việc', desc: 'Ứng tuyển chỉ với một cú nhấp chuột, trò chuyện với nhà tuyển dụng và nhận công việc mơ ước.' }
 ];
 
 const TESTIMONIALS = [
   {
     name: 'Nguyễn Minh Anh',
-    role: 'Software Engineer Intern',
-    quote: 'Hiretify helped me land my first internship within 2 weeks. The real-time chat with recruiters made the process so much smoother.',
+    role: 'Thực tập sinh Kỹ sư Phần mềm',
+    quote: 'Hiretify giúp mình tìm được công việc thực tập đầu tiên chỉ trong 2 tuần. Trò chuyện trực tiếp với nhà tuyển dụng giúp quy trình chuyên nghiệp hơn rất nhiều.',
     rating: 5
   },
   {
     name: 'Trần Đức Huy',
-    role: 'HR Manager, TechCorp',
-    quote: 'As a recruiter, the dashboard gives me everything I need. Application tracking and candidate management are incredibly intuitive.',
+    role: 'Quản lý HR, TechCorp',
+    quote: 'Với tư cách là nhà tuyển dụng, bảng điều khiển cung cấp mọi thứ tôi cần. Việc theo dõi ứng viên và quản lý hồ sơ vô cùng trực quan.',
     rating: 5
   },
   {
     name: 'Lê Thị Hồng',
-    role: 'Marketing Graduate',
-    quote: 'I love how clean and modern the interface is. Applying to jobs has never been this easy. Highly recommended for students!',
+    role: 'Cử nhân Marketing',
+    quote: 'Tôi thích giao diện hiện đại và sạch sẽ của trang web. Ứng tuyển việc làm chưa bao giờ dễ dàng đến thế. Rất khuyên dùng cho các bạn sinh viên!',
     rating: 5
   }
 ];
@@ -143,9 +143,9 @@ const LandingPage = () => {
           </Link>
 
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
-            <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#how-it-works" className="hover:text-white transition-colors">How it works</a>
-            <a href="#testimonials" className="hover:text-white transition-colors">Testimonials</a>
+            <a href="#features" className="hover:text-white transition-colors">Tính năng</a>
+            <a href="#how-it-works" className="hover:text-white transition-colors">Quy trình</a>
+            <a href="#testimonials" className="hover:text-white transition-colors">Đánh giá</a>
           </div>
 
           <div className="flex items-center gap-3">
@@ -154,7 +154,7 @@ const LandingPage = () => {
                 to="/jobs"
                 className="px-5 py-2 bg-white text-black text-sm font-bold rounded-lg hover:bg-gray-200 transition-colors"
               >
-                Go to Dashboard
+                Đến Bảng điều khiển
               </Link>
             ) : (
               <>
@@ -162,13 +162,13 @@ const LandingPage = () => {
                   to="/login"
                   className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
                 >
-                  Log in
+                  Đăng nhập
                 </Link>
                 <Link
                   to="/register"
                   className="px-5 py-2 bg-white text-black text-sm font-bold rounded-lg hover:bg-gray-200 transition-colors"
                 >
-                  Sign Up
+                  Đăng ký
                 </Link>
               </>
             )}
@@ -186,19 +186,19 @@ const LandingPage = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs font-bold text-gray-300 uppercase tracking-widest mb-8">
             <Sparkles className="h-3.5 w-3.5 text-blue-400" />
-            The Recruitment Platform for Students
+            Nền tảng Tuyển dụng dành cho Sinh viên
           </div>
 
           {/* Main heading */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-6">
-            Find Your
+            Tìm Công Việc
             <br />
-            <span className="landing-gradient-text">Dream Job.</span>
+            <span className="landing-gradient-text">Mơ Ước.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-gray-400 font-medium max-w-2xl mx-auto mb-10 leading-relaxed">
-            Hiretify connects talented students with top companies.
-            Build your profile, discover opportunities, and launch your career — all in one place.
+            Hiretify kết nối sinh viên tài năng với các công ty hàng đầu.
+            Xây dựng hồ sơ, khám phá cơ hội và bắt đầu sự nghiệp của bạn — tất cả tại một nơi.
           </p>
 
           {/* CTA Buttons */}
@@ -207,13 +207,13 @@ const LandingPage = () => {
               to="/register"
               className="landing-glow-btn px-8 py-4 bg-white text-black font-bold rounded-xl text-sm uppercase tracking-widest hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all flex items-center gap-2"
             >
-              Get Started Free <ArrowRight className="h-4 w-4" />
+              Bắt đầu miễn phí <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               to="/jobs"
               className="px-8 py-4 border border-white/20 text-white font-bold rounded-xl text-sm uppercase tracking-widest hover:bg-white/5 transition-all flex items-center gap-2"
             >
-              Browse Jobs <ChevronRight className="h-4 w-4" />
+              Khám phá việc làm <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -221,17 +221,17 @@ const LandingPage = () => {
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
             <div className="landing-stat text-center">
               <p className="text-3xl md:text-4xl font-black text-white tracking-tight">{jobCount.toLocaleString()}+</p>
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Jobs Posted</p>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Tin tuyển dụng</p>
             </div>
             <div className="w-px h-10 bg-white/10 hidden md:block" />
             <div className="landing-stat text-center" style={{ animationDelay: '0.2s' }}>
               <p className="text-3xl md:text-4xl font-black text-white tracking-tight">{appCount.toLocaleString()}+</p>
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Applications</p>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Đơn ứng tuyển</p>
             </div>
             <div className="w-px h-10 bg-white/10 hidden md:block" />
             <div className="landing-stat text-center" style={{ animationDelay: '0.4s' }}>
               <p className="text-3xl md:text-4xl font-black text-white tracking-tight">{companyCount.toLocaleString()}+</p>
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Companies</p>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Công ty</p>
             </div>
           </div>
         </div>
@@ -240,7 +240,7 @@ const LandingPage = () => {
       {/* ===== SOCIAL PROOF BAR ===== */}
       <section className="py-12 border-y border-white/5 overflow-hidden">
         <p className="text-center text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em] mb-8">
-          Trusted by leading companies
+          Được tin dùng bởi các công ty hàng đầu
         </p>
         <div className="relative landing-no-scrollbar">
           <div className="flex items-center gap-16 landing-logo-scroll" style={{ width: 'max-content' }}>
@@ -261,13 +261,13 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
-              <Zap className="h-3 w-3 text-yellow-400" /> Features
+              <Zap className="h-3 w-3 text-yellow-400" /> Tính năng
             </div>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">
-              Everything you need.
+              Mọi thứ bạn cần.
             </h2>
             <p className="text-gray-500 font-medium max-w-lg mx-auto">
-              A complete toolkit to streamline your job search or recruitment workflow.
+              Bộ công cụ hoàn chỉnh để tối ưu hóa quy trình tìm việc hoặc tuyển dụng của bạn.
             </p>
           </div>
 
@@ -290,13 +290,13 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
-              <Globe className="h-3 w-3 text-blue-400" /> Process
+              <Globe className="h-3 w-3 text-blue-400" /> Quy trình
             </div>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">
-              Three steps to success.
+              Ba bước để thành công.
             </h2>
             <p className="text-gray-500 font-medium max-w-lg mx-auto">
-              From sign-up to getting hired, our platform makes it seamless.
+              Từ lúc đăng ký đến khi được nhận việc, nền tảng của chúng tôi giúp mọi thứ trở nên liền mạch.
             </p>
           </div>
 
@@ -321,10 +321,10 @@ const LandingPage = () => {
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">
-              Designed for productivity.
+              Thiết kế cho sự hiệu quả.
             </h2>
             <p className="text-gray-500 font-medium max-w-lg mx-auto">
-              A clean, intuitive interface that helps you focus on what matters.
+              Giao diện sạch sẽ, trực quan giúp bạn tập trung vào những điều quan trọng nhất.
             </p>
           </div>
 
@@ -381,13 +381,13 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
-              <Users className="h-3 w-3 text-green-400" /> Testimonials
+              <Users className="h-3 w-3 text-green-400" /> Đánh giá
             </div>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">
-              Loved by users.
+              Được người dùng tin yêu.
             </h2>
             <p className="text-gray-500 font-medium max-w-lg mx-auto">
-              Hear what students and recruiters have to say about Hiretify.
+              Lắng nghe những chia sẻ từ sinh viên và nhà tuyển dụng về Hiretify.
             </p>
           </div>
 
@@ -421,13 +421,13 @@ const LandingPage = () => {
       <section className="py-24 md:py-32 relative landing-cta-glow">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-6">
-            Ready to start
+            Sẵn sàng để bắt đầu
             <br />
-            <span className="landing-gradient-text">your journey?</span>
+            <span className="landing-gradient-text">hành trình của bạn?</span>
           </h2>
           <p className="text-gray-400 font-medium max-w-lg mx-auto mb-10">
-            Join thousands of students and companies already using Hiretify
-            to build the future workforce.
+            Tham gia cùng hàng ngàn sinh viên và công ty đang sử dụng Hiretify 
+            để xây dựng lực lượng lao động tương lai.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -435,40 +435,18 @@ const LandingPage = () => {
               to="/register"
               className="landing-glow-btn px-8 py-4 bg-white text-black font-bold rounded-xl text-sm uppercase tracking-widest hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all flex items-center gap-2"
             >
-              Sign Up Free <ArrowRight className="h-4 w-4" />
+              Đăng ký miễn phí <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               to="/jobs"
               className="px-8 py-4 border border-white/20 text-white font-bold rounded-xl text-sm uppercase tracking-widest hover:bg-white/5 transition-all"
             >
-              Browse Jobs
+              Khám phá việc làm
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/5 py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-black tracking-tighter">
-                Hiretify<span className="text-blue-400">.</span>
-              </span>
-              <span className="text-xs text-gray-600 font-medium">
-                © {new Date().getFullYear()}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-6 text-xs text-gray-500 font-medium">
-              <a href="#" className="hover:text-white transition-colors">About</a>
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
-              <a href="mailto:support@hiretify.com" className="hover:text-white transition-colors">Contact</a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

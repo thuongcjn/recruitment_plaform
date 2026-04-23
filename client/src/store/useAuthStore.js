@@ -13,7 +13,7 @@ export const useAuthStore = create(
         isAuthenticated: true 
       }),
 
-      logout: () => set({ 
+      clearAuth: () => set({ 
         user: null, 
         isAuthenticated: false 
       }),

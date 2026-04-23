@@ -55,7 +55,7 @@ const JobDetails = () => {
 
   useEffect(() => {
     if (job) {
-      setChatMessage(`Hi, I'm interested in the ${job.title} position.`);
+      setChatMessage(`Xin chào, tôi quan tâm đến vị trí ${job.title}.`);
     }
   }, [job]);
 
@@ -64,7 +64,7 @@ const JobDetails = () => {
       const data = await getJob(id);
       setJob(data.data);
     } catch (err) {
-      setError('Failed to fetch job details');
+      setError('Không thể tải chi tiết công việc');
     } finally {
       setLoading(false);
     }
@@ -87,12 +87,12 @@ const JobDetails = () => {
     }
 
     if (user.role !== 'candidate') {
-      setError('Only candidates can apply for jobs');
+      setError('Chỉ ứng viên mới có thể ứng tuyển việc làm');
       return;
     }
 
     if (!user.candidateProfile?.resumeUrl) {
-      setError('Please upload your resume in your profile before applying');
+      setError('Vui lòng tải lên CV trong hồ sơ cá nhân trước khi ứng tuyển');
       return;
     }
 
@@ -100,10 +100,10 @@ const JobDetails = () => {
     setError('');
     try {
       await applyToJob(id);
-      setSuccess('Application submitted successfully!');
+      setSuccess('Đã gửi đơn ứng tuyển thành công!');
       setHasApplied(true);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to submit application');
+      setError(err.response?.data?.message || 'Gửi đơn ứng tuyển thất bại');
     } finally {
       setApplying(false);
     }
@@ -126,7 +126,7 @@ const JobDetails = () => {
       navigate(`/chat/${res.conversationId}`);
     } catch (err) {
       console.error('Error starting chat:', err);
-      setError('Failed to start chat session');
+      setError('Không thể bắt đầu cuộc hội thoại');
     } finally {
       setStartingChat(false);
     }
@@ -141,10 +141,10 @@ const JobDetails = () => {
         jobId: id,
         reason: reportReason
       });
-      setSuccess('Job reported successfully. Our team will review it.');
+      setSuccess('Đã báo cáo công việc thành công. Chúng tôi sẽ xem xét sớm nhất.');
       setReportReason('');
     } catch (err) {
-      setError('Failed to submit report');
+      setError('Gửi báo cáo thất bại');
     } finally {
       setReporting(false);
     }
@@ -153,14 +153,14 @@ const JobDetails = () => {
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-20 space-y-4">
       <Loader2 className="animate-spin h-10 w-10 text-blue-600" />
-      <p className="text-gray-500 font-medium">Loading job details...</p>
+      <p className="text-gray-500 font-medium">Đang tải chi tiết công việc...</p>
     </div>
   );
 
   if (error && !job) return (
     <div className="container mx-auto p-10">
-      <Alert variant="destructive"><AlertDescription>{error || 'Job not found'}</AlertDescription></Alert>
-      <Button onClick={() => navigate('/')} className="mt-4"><ArrowLeft className="h-4 w-4 mr-2" /> Back to Feed</Button>
+      <Alert variant="destructive"><AlertDescription>{error || 'Không tìm thấy công việc'}</AlertDescription></Alert>
+      <Button onClick={() => navigate('/')} className="mt-4"><ArrowLeft className="h-4 w-4 mr-2" /> Quay lại danh sách</Button>
     </div>
   );
 
@@ -170,10 +170,10 @@ const JobDetails = () => {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="text-gray-600">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            Quay lại
           </Button>
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" className="hidden md:flex">Share Job</Button>
+            <Button variant="outline" size="sm" className="hidden md:flex">Chia sẻ</Button>
             
             {isAuthenticated && user?.role === 'candidate' && (
               <AlertDialog open={isChatModalOpen} onOpenChange={setIsChatModalOpen}>
@@ -184,32 +184,32 @@ const JobDetails = () => {
                     className="border-black text-black hover:bg-black hover:text-white"
                   >
                     <MessageCircle className="h-4 w-4 mr-2" />
-                    Chat with Recruiter
+                    Nhắn tin với nhà tuyển dụng
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="rounded-3xl p-8 border-none max-w-md">
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-2xl font-black tracking-tighter">Start Conversation</AlertDialogTitle>
+                    <AlertDialogTitle className="text-2xl font-black tracking-tighter">Bắt đầu hội thoại</AlertDialogTitle>
                     <AlertDialogDescription className="font-medium text-gray-500">
-                      Send a message to the recruiter of {job.company?.fullName}.
+                      Gửi tin nhắn đến nhà tuyển dụng của {job.company?.fullName}.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <div className="py-4">
                     <Textarea 
-                      placeholder="Type your first message..." 
+                      placeholder="Nhập tin nhắn đầu tiên của bạn..." 
                       className="rounded-2xl border-gray-100 bg-gray-50 min-h-[120px]"
                       value={chatMessage}
                       onChange={(e) => setChatMessage(e.target.value)}
                     />
                   </div>
                   <AlertDialogFooter className="gap-3">
-                    <AlertDialogCancel className="rounded-xl font-bold">Cancel</AlertDialogCancel>
+                    <AlertDialogCancel className="rounded-xl font-bold">Hủy</AlertDialogCancel>
                     <AlertDialogAction 
                       onClick={handleStartChat}
                       disabled={!chatMessage.trim() || startingChat}
                       className="rounded-xl bg-black hover:bg-gray-800 font-bold"
                     >
-                      {startingChat ? 'Sending...' : 'Send Message'}
+                      {startingChat ? 'Đang gửi...' : 'Gửi tin nhắn'}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -224,7 +224,7 @@ const JobDetails = () => {
                 onClick={handleApply}
               >
                 {applying ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : null}
-                {hasApplied ? 'Applied' : 'Apply Now'}
+                {hasApplied ? 'Đã ứng tuyển' : 'Ứng tuyển ngay'}
               </Button>
             )}
           </div>
@@ -260,39 +260,39 @@ const JobDetails = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-gray-100 mb-8">
                 <div className="space-y-1">
                   <p className="text-[10px] uppercase tracking-wider text-gray-400 font-black flex items-center">
-                    <MapPin className="h-3 w-3 mr-1" /> Location
+                    <MapPin className="h-3 w-3 mr-1" /> Địa điểm
                   </p>
                   <p className="font-bold text-black">{job.location}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] uppercase tracking-wider text-gray-400 font-black flex items-center">
-                    <DollarSign className="h-3 w-3 mr-1" /> Salary
+                    <DollarSign className="h-3 w-3 mr-1" /> Mức lương
                   </p>
                   <p className="font-bold text-black">{job.salaryRange}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] uppercase tracking-wider text-gray-400 font-black flex items-center">
-                    <Briefcase className="h-3 w-3 mr-1" /> Category
+                    <Briefcase className="h-3 w-3 mr-1" /> Lĩnh vực
                   </p>
                   <p className="font-bold text-black">{job.category}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] uppercase tracking-wider text-gray-400 font-black flex items-center">
-                    <Clock className="h-3 w-3 mr-1" /> Posted
+                    <Clock className="h-3 w-3 mr-1" /> Ngày đăng
                   </p>
-                  <p className="font-bold text-black">{new Date(job.createdAt).toLocaleDateString()}</p>
+                  <p className="font-bold text-black">{new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
                 </div>
               </div>
 
               <div className="prose prose-slate max-w-none">
-                <h3 className="text-xl font-black text-black tracking-tight mb-4">Job Description</h3>
+                <h3 className="text-xl font-black text-black tracking-tight mb-4">Mô tả công việc</h3>
                 <div className="text-gray-600 leading-relaxed whitespace-pre-wrap mb-8 font-medium">
                   {job.description}
                 </div>
 
                 {job.requirements?.length > 0 && (
                   <div className="mb-8">
-                    <h3 className="text-xl font-black text-black tracking-tight mb-4">Requirements</h3>
+                    <h3 className="text-xl font-black text-black tracking-tight mb-4">Yêu cầu ứng viên</h3>
                     <ul className="space-y-3">
                       {job.requirements.map((req, i) => (
                         <li key={i} className="flex items-start">
@@ -306,7 +306,7 @@ const JobDetails = () => {
 
                 {job.benefits?.length > 0 && (
                   <div className="mb-8">
-                    <h3 className="text-xl font-black text-black tracking-tight mb-4">Benefits</h3>
+                    <h3 className="text-xl font-black text-black tracking-tight mb-4">Quyền lợi</h3>
                     <ul className="space-y-3">
                       {job.benefits.map((benefit, i) => (
                         <li key={i} className="flex items-start">
@@ -322,38 +322,38 @@ const JobDetails = () => {
               <div className="mt-12 pt-8 border-t flex items-center justify-between">
                 <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
                   <Flag className="h-3 w-3" />
-                  Is there something wrong with this job?
+                  Bạn thấy có điều gì bất thường về công việc này?
                 </div>
                 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="ghost" size="sm" className="text-xs font-black uppercase tracking-widest text-red-500 hover:text-red-600 hover:bg-red-50">
-                      Report Job
+                      Báo cáo vi phạm
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent className="rounded-3xl p-8 border-none">
                     <AlertDialogHeader>
-                      <AlertDialogTitle className="text-2xl font-black tracking-tighter">Report Job Posting</AlertDialogTitle>
+                      <AlertDialogTitle className="text-2xl font-black tracking-tighter">Báo cáo tin tuyển dụng</AlertDialogTitle>
                       <AlertDialogDescription className="font-medium text-gray-500">
-                        Please specify the reason for reporting this job. Our team will review it within 24 hours.
+                        Vui lòng nêu rõ lý do báo cáo. Chúng tôi sẽ xem xét trong vòng 24 giờ.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <div className="py-4">
                       <Textarea 
-                        placeholder="Reason for report (e.g. Fake job, Misleading info, Inappropriate content...)" 
+                        placeholder="Lý do báo cáo (ví dụ: Tin giả, thông tin sai lệch, nội dung không phù hợp...)" 
                         className="rounded-2xl border-gray-100 bg-gray-50 min-h-[120px]"
                         value={reportReason}
                         onChange={(e) => setReportReason(e.target.value)}
                       />
                     </div>
                     <AlertDialogFooter className="gap-3">
-                      <AlertDialogCancel className="rounded-xl font-bold">Cancel</AlertDialogCancel>
+                      <AlertDialogCancel className="rounded-xl font-bold">Hủy</AlertDialogCancel>
                       <AlertDialogAction 
                         onClick={handleReport}
                         disabled={!reportReason.trim() || reporting}
                         className="rounded-xl bg-red-600 hover:bg-red-700 font-bold"
                       >
-                        {reporting ? 'Reporting...' : 'Submit Report'}
+                        {reporting ? 'Đang gửi...' : 'Gửi báo cáo'}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -367,11 +367,11 @@ const JobDetails = () => {
         <div className="lg:col-span-4 space-y-6">
           <Card className="border-none shadow-sm rounded-3xl overflow-hidden">
             <CardHeader className="bg-gray-50/50">
-              <CardTitle className="text-lg font-black tracking-tight">About Company</CardTitle>
+              <CardTitle className="text-lg font-black tracking-tight">Về công ty</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6 p-6">
               <p className="text-gray-500 text-sm leading-relaxed line-clamp-6 font-medium">
-                {job.company?.companyProfile?.description || 'No description available for this company.'}
+                {job.company?.companyProfile?.description || 'Không có mô tả cho công ty này.'}
               </p>
               
               <div className="space-y-3 pt-4 border-t border-gray-100">
@@ -382,16 +382,16 @@ const JobDetails = () => {
                     rel="noreferrer"
                     className="flex items-center text-sm text-black font-bold hover:underline"
                   >
-                    <Globe className="h-4 w-4 mr-2" /> Visit Website
+                    <Globe className="h-4 w-4 mr-2" /> Ghé thăm website
                   </a>
                 )}
                 <div className="flex items-center text-sm text-gray-400 font-bold">
-                  <Building2 className="h-4 w-4 mr-2" /> {job.company?.companyProfile?.location || 'Location hidden'}
+                  <Building2 className="h-4 w-4 mr-2" /> {job.company?.companyProfile?.location || 'Địa điểm không công khai'}
                 </div>
               </div>
 
               <Button asChild variant="outline" className="w-full rounded-xl font-bold border-gray-200">
-                <Link to={`/company/${job.company?._id}`}>View Company Profile</Link>
+                <Link to={`/company/${job.company?._id}`}>Xem hồ sơ công ty</Link>
               </Button>
             </CardContent>
           </Card>
@@ -402,9 +402,9 @@ const JobDetails = () => {
                 <Briefcase className="h-8 w-8 text-white" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-black tracking-tighter">Interested in this role?</h3>
+                <h3 className="text-xl font-black tracking-tighter">Quan tâm đến vị trí này?</h3>
                 <p className="text-gray-400 text-sm font-medium">
-                  Join {job.company?.fullName} as their next {job.title}.
+                  Gia nhập {job.company?.fullName} với vị trí {job.title}.
                 </p>
               </div>
               <Button 
@@ -413,10 +413,10 @@ const JobDetails = () => {
                 className="w-full bg-white text-black hover:bg-gray-100 h-14 rounded-2xl text-lg font-black tracking-tight transition-transform active:scale-95 shadow-xl"
               >
                 {applying ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : null}
-                {hasApplied ? 'Successfully Applied' : 'Apply for this Job'}
+                {hasApplied ? 'Ứng tuyển thành công' : 'Ứng tuyển công việc này'}
               </Button>
               {user?.role === 'recruiter' && (
-                <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest mt-2">Recruiters cannot apply for jobs.</p>
+                <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest mt-2">Nhà tuyển dụng không thể ứng tuyển việc làm.</p>
               )}
             </CardContent>
           </Card>

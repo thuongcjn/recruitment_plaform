@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
     // Check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'Người dùng đã tồn tại' });
     }
 
     // Create user
@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
     if (user) {
       await sendTokenResponse(user, 201, res);
     } else {
-      res.status(400).json({ message: 'Invalid user data' });
+      res.status(400).json({ message: 'Dữ liệu người dùng không hợp lệ' });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -51,7 +51,7 @@ exports.login = async (req, res) => {
       }
       await sendTokenResponse(user, 200, res);
     } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+      res.status(401).json({ message: 'Sai tài khoản hoặc mật khẩu' });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -86,24 +86,26 @@ exports.getProfile = async (req, res) => {
 // @route   GET /api/auth/logout
 // @access  Private
 exports.logout = async (req, res) => {
-  // Remove refresh token from DB
-  await User.findByIdAndUpdate(req.user._id, { refreshToken: null });
+  try {
+    // Remove refresh token from DB if user is found
+    if (req.user && req.user._id) {
+      await User.findByIdAndUpdate(req.user._id, { refreshToken: null });
+    }
 
-  res.cookie('accessToken', 'none', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-  });
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      expires: new Date(0), // Set expiry to the past
+    };
 
-  res.cookie('refreshToken', 'none', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-  });
+    res.cookie('accessToken', 'none', cookieOptions);
+    res.cookie('refreshToken', 'none', cookieOptions);
 
-  res.status(200).json({ success: true, message: 'User logged out' });
+    res.status(200).json({ success: true, message: 'User logged out' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
 
 // @desc    Refresh token
@@ -133,7 +135,7 @@ exports.refresh = async (req, res) => {
 
     await sendTokenResponse(user, 200, res);
   } catch (error) {
-    res.status(401).json({ message: 'Invalid refresh token' });
+    res.status(401).json({ message: 'Refresh token không hợp lệ' });
   }
 };
 

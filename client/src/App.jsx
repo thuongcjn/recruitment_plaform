@@ -19,6 +19,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminReports from './pages/AdminReports';
 import AdminUsers from './pages/AdminUsers';
 import LandingPage from './pages/LandingPage';
+import CandidatePublicProfile from './pages/CandidatePublicProfile';
+import Footer from './components/layout/Footer';
 import { SocketProvider } from './context/SocketContext';
 
 // Protected Route Component
@@ -47,6 +49,7 @@ function MainLayout() {
   const { isAuthenticated } = useAuthStore();
   const location = useLocation();
   const isLandingPage = location.pathname === '/';
+  const isChatPage = location.pathname.startsWith('/chat');
 
   return (
     <div className="min-h-screen bg-gray-50/30">
@@ -57,118 +60,120 @@ function MainLayout() {
         <Route path="/jobs" element={<JobFeed />} />
         <Route path="/jobs/:id" element={<JobDetails />} />
         <Route path="/company/:id" element={<CompanyPublicProfile />} />
+        <Route path="/candidate/:id" element={<CandidatePublicProfile />} />
         <Route path="/login" element={isAuthenticated ? <Navigate to="/jobs" /> : <Login />} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/jobs" /> : <Register />} />
-        
+
         {/* Protected Routes */}
-        <Route 
-          path="/profile" 
+        <Route
+          path="/profile"
           element={
             <ProtectedRoute>
               <Profile />
             </ProtectedRoute>
-          } 
-        />
-        
-        <Route 
-          path="/chat" 
-          element={
-            <ProtectedRoute>
-              <Chat />
-            </ProtectedRoute>
-          } 
+          }
         />
 
-        <Route 
-          path="/chat/:id" 
+        <Route
+          path="/chat"
           element={
             <ProtectedRoute>
               <Chat />
             </ProtectedRoute>
-          } 
+          }
         />
-        
+
+        <Route
+          path="/chat/:id"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Recruiter Routes */}
-        <Route 
-          path="/post-job" 
+        <Route
+          path="/post-job"
           element={
             <RecruiterRoute>
               <PostJob />
             </RecruiterRoute>
-          } 
+          }
         />
 
-        <Route 
-          path="/my-jobs" 
+        <Route
+          path="/my-jobs"
           element={
             <RecruiterRoute>
               <MyJobs />
             </RecruiterRoute>
-          } 
+          }
         />
 
-        <Route 
-          path="/edit-job/:id" 
+        <Route
+          path="/edit-job/:id"
           element={
             <RecruiterRoute>
               <EditJob />
             </RecruiterRoute>
-          } 
+          }
         />
 
-        <Route 
-          path="/applied-jobs" 
+        <Route
+          path="/applied-jobs"
           element={
             <ProtectedRoute>
               <AppliedJobs />
             </ProtectedRoute>
-          } 
+          }
         />
 
-        <Route 
-          path="/applicants/:jobId" 
+        <Route
+          path="/applicants/:jobId"
           element={
             <RecruiterRoute>
               <ViewApplicants />
             </RecruiterRoute>
-          } 
+          }
         />
 
         {/* Admin Routes */}
-        <Route 
-          path="/admin/dashboard" 
+        <Route
+          path="/admin/dashboard"
           element={
             <AdminRoute>
               <AdminDashboard />
             </AdminRoute>
-          } 
+          }
         />
-        <Route 
-          path="/admin/reports" 
+        <Route
+          path="/admin/reports"
           element={
             <AdminRoute>
               <AdminReports />
             </AdminRoute>
-          } 
+          }
         />
-        <Route 
-          path="/admin/users" 
+        <Route
+          path="/admin/users"
           element={
             <AdminRoute>
               <AdminUsers />
             </AdminRoute>
-          } 
+          }
         />
 
         {/* Catch all */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      {!isChatPage && <Footer />}
     </div>
   );
 }
 
 function App() {
-  const { setAuth, logout } = useAuthStore();
+  const { setAuth, clearAuth } = useAuthStore();
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
@@ -178,21 +183,21 @@ function App() {
         setAuth(data);
       } catch (err) {
         // Not authorized, which is fine for public pages
-        logout();
+        clearAuth();
       } finally {
         setIsInitializing(false);
       }
     };
 
     initAuth();
-  }, [setAuth, logout]);
+  }, [setAuth, clearAuth]);
 
   if (isInitializing) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="flex flex-col items-center space-y-4">
           <div className="h-12 w-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-500 font-medium animate-pulse">Initializing Hiretify...</p>
+          <p className="text-gray-500 font-medium animate-pulse">Đang khởi tạo Hiretify...</p>
         </div>
       </div>
     );

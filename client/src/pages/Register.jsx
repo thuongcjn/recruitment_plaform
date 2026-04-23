@@ -39,7 +39,7 @@ const Register = () => {
       setAuth(data);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to register');
+      setError(err.response?.data?.message || 'Đăng ký thất bại');
     } finally {
       setIsLoading(false);
     }
@@ -49,8 +49,8 @@ const Register = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-          <CardDescription>Join Hiretify to start your career journey</CardDescription>
+          <CardTitle className="text-2xl font-bold">Tạo tài khoản mới</CardTitle>
+          <CardDescription>Gia nhập Hiretify để bắt đầu hành trình sự nghiệp của bạn</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -60,7 +60,7 @@ const Register = () => {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
+              <Label htmlFor="fullName">Họ và tên</Label>
               <Input
                 id="fullName"
                 type="text"
@@ -82,7 +82,7 @@ const Register = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Mật khẩu</Label>
               <Input
                 id="password"
                 type="password"
@@ -92,26 +92,26 @@ const Register = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="role">I am a...</Label>
+              <Label htmlFor="role">Tôi là...</Label>
               <Select onValueChange={handleRoleChange} defaultValue="candidate">
                 <SelectTrigger id="role">
-                  <SelectValue placeholder="Select your role" />
+                  <SelectValue placeholder="Chọn vai trò của bạn" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="candidate">Student / Candidate</SelectItem>
-                  <SelectItem value="recruiter">Recruiter / Employer</SelectItem>
+                  <SelectItem value="candidate">Ứng viên / Sinh viên</SelectItem>
+                  <SelectItem value="recruiter">Nhà tuyển dụng</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Creating account...' : 'Register'}
+              {isLoading ? 'Đang tạo tài khoản...' : 'Đăng ký'}
             </Button>
             <p className="text-sm text-center text-gray-600">
-              Already have an account?{' '}
+              Đã có tài khoản?{' '}
               <Link to="/login" className="text-blue-600 hover:underline">
-                Login
+                Đăng nhập ngay
               </Link>
             </p>
           </CardFooter>

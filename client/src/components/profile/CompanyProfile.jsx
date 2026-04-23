@@ -41,7 +41,7 @@ const CompanyProfile = () => {
         });
       }
     } catch (err) {
-      setError('Failed to fetch profile');
+      setError('Không thể tải hồ sơ');
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ const CompanyProfile = () => {
     setSuccess('');
     try {
       const response = await updateCompanyProfile(profile);
-      
+
       // Update global auth store
       if (response.success) {
         setAuth({
@@ -62,10 +62,10 @@ const CompanyProfile = () => {
         });
       }
 
-      setSuccess('Company profile updated successfully!');
+      setSuccess('Cập nhật hồ sơ công ty thành công!');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update profile');
+      setError(err.response?.data?.message || 'Cập nhật hồ sơ thất bại');
     } finally {
       setSaving(false);
     }
@@ -80,7 +80,7 @@ const CompanyProfile = () => {
       const data = await uploadFile(file);
       const newProfile = { ...profile, logoUrl: data.url };
       setProfile(newProfile);
-      
+
       // Auto save after upload and update store
       const response = await updateCompanyProfile(newProfile);
       if (response.success) {
@@ -90,9 +90,9 @@ const CompanyProfile = () => {
         });
       }
 
-      setSuccess('Logo updated and saved!');
+      setSuccess('Đã cập nhật và lưu Logo!');
     } catch (err) {
-      setError('Failed to upload logo');
+      setError('Tải lên logo thất bại');
     } finally {
       setSaving(false);
     }
@@ -101,7 +101,7 @@ const CompanyProfile = () => {
   if (loading) return (
     <div className="flex flex-col items-center justify-center p-20 space-y-4">
       <Loader2 className="animate-spin h-10 w-10 text-blue-600" />
-      <p className="text-gray-500 font-medium">Loading company profile...</p>
+      <p className="text-gray-500 font-medium">Đang tải hồ sơ công ty...</p>
     </div>
   );
 
@@ -114,7 +114,7 @@ const CompanyProfile = () => {
         {/* Left Column: Logo and CTA */}
         <div className="lg:col-span-4 space-y-6">
           <Card className="border-none shadow-sm overflow-hidden">
-            <div className="h-24 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+            <div className="h-24 bg-gradient-to-r from-[#000000] via-[#0b1219] to-[#152331]"></div>
             <CardContent className="flex flex-col items-center -mt-12">
               <div className="w-32 h-32 rounded-2xl border-4 border-white shadow-lg bg-white flex items-center justify-center overflow-hidden mb-4 group relative">
                 {profile.logoUrl ? (
@@ -128,32 +128,35 @@ const CompanyProfile = () => {
                   </Label>
                 </div>
               </div>
-              <input 
+              <input
                 id="logo-upload"
-                type="file" 
-                accept="image/*" 
+                type="file"
+                accept="image/*"
                 onChange={handleUploadLogo}
                 className="hidden"
               />
-              <h2 className="text-xl font-bold text-gray-900">{profile.companyName || 'Company Name'}</h2>
-              <p className="text-sm text-gray-500 mb-6">{profile.location || 'Location'}</p>
-              
+              <h2 className="text-xl font-bold text-gray-900">{profile.companyName || 'Tên công ty'}</h2>
+              <p className="text-sm text-gray-500 mb-6">{profile.location || 'Địa điểm'}</p>
+
               <Button variant="outline" size="sm" className="w-full relative cursor-pointer overflow-hidden mb-2">
                 <Upload className="h-4 w-4 mr-2" />
-                Upload New Logo
-                <input 
-                  type="file" 
-                  accept="image/*" 
+                Tải lên Logo mới
+                <input
+                  type="file"
+                  accept="image/*"
                   onChange={handleUploadLogo}
                   className="absolute inset-0 opacity-0 cursor-pointer"
                 />
               </Button>
             </CardContent>
           </Card>
-
-          <Button onClick={handleSave} disabled={saving} className="w-full h-12 bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200 text-lg">
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            className="w-full bg-[#0a0a0a] hover:bg-[#1f1f1f] text-white rounded-xl h-12 font-bold shadow-lg"
+          >
             {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle className="mr-2 h-4 w-4" />}
-            Save Profile
+            Lưu hồ sơ
           </Button>
         </div>
 
@@ -163,27 +166,27 @@ const CompanyProfile = () => {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Info className="h-5 w-5 mr-2 text-blue-500" />
-                General Information
+                Thông tin chung
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 gap-6">
                 <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-700">Company Legal Name</Label>
-                  <Input 
-                    value={profile.companyName} 
+                  <Label className="text-sm font-semibold text-gray-700">Tên pháp lý công ty</Label>
+                  <Input
+                    value={profile.companyName}
                     onChange={(e) => setProfile({ ...profile, companyName: e.target.value })}
-                    placeholder="Enter your company name"
+                    placeholder="Nhập tên công ty của bạn"
                     className="h-11 focus-visible:ring-blue-500"
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold text-gray-700 flex items-center">
-                      <Globe className="h-4 w-4 mr-2 text-gray-400" /> Website
+                      <Globe className="h-4 w-4 mr-2 text-gray-400" /> Trang web
                     </Label>
-                    <Input 
-                      value={profile.website} 
+                    <Input
+                      value={profile.website}
                       onChange={(e) => setProfile({ ...profile, website: e.target.value })}
                       placeholder="https://company.com"
                       className="h-11 focus-visible:ring-blue-500"
@@ -191,12 +194,12 @@ const CompanyProfile = () => {
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold text-gray-700 flex items-center">
-                      <MapPin className="h-4 w-4 mr-2 text-gray-400" /> Headquarters Location
+                      <MapPin className="h-4 w-4 mr-2 text-gray-400" /> Trụ sở chính
                     </Label>
-                    <Input 
-                      value={profile.location} 
+                    <Input
+                      value={profile.location}
                       onChange={(e) => setProfile({ ...profile, location: e.target.value })}
-                      placeholder="City, Country"
+                      placeholder="Thành phố, Quốc gia"
                       className="h-11 focus-visible:ring-blue-500"
                     />
                   </div>
@@ -207,12 +210,12 @@ const CompanyProfile = () => {
 
           <Card className="border-none shadow-sm">
             <CardHeader>
-              <CardTitle>About Your Company</CardTitle>
-              <CardDescription>Share your vision, missions, and what makes your company a great place to work.</CardDescription>
+              <CardTitle>Giới thiệu về công ty</CardTitle>
+              <CardDescription>Chia sẻ tầm nhìn, sứ mệnh và những điều làm nên môi trường làm việc tuyệt vời tại công ty bạn.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Textarea 
-                placeholder="Describe your company culture, technology stack, and values..."
+              <Textarea
+                placeholder="Mô tả văn hóa công ty, nền tảng công nghệ và các giá trị cốt lõi..."
                 value={profile.description}
                 onChange={(e) => setProfile({ ...profile, description: e.target.value })}
                 className="min-h-[300px] text-lg leading-relaxed focus-visible:ring-blue-500"
