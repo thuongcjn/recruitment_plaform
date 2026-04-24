@@ -78,21 +78,21 @@ const ViewApplicants = () => {
   return (
     <div className="min-h-screen bg-[#F1F2F4] py-12 px-4 md:px-8">
       <div className="container mx-auto max-w-6xl">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div className="space-y-1">
             <Link to="/my-jobs" className="text-sm font-bold text-gray-500 hover:text-black flex items-center gap-1 mb-2">
               <ArrowLeft className="h-4 w-4" /> Quay lại quản lý tin
             </Link>
-            <h1 className="text-3xl font-black text-black tracking-tight">Danh sách ứng viên</h1>
-            <p className="text-gray-500 font-medium">Đang xem xét ứng viên cho vị trí <span className="text-black font-bold">{job?.title}</span></p>
+            <h1 className="text-2xl md:text-3xl font-black text-black tracking-tight leading-tight max-w-xl">Danh sách ứng viên</h1>
+            <p className="text-gray-500 font-medium text-sm md:text-base">Đang xem xét ứng viên cho vị trí <span className="text-black font-bold">{job?.title}</span></p>
           </div>
-          <Badge className="bg-black text-white px-4 py-1.5 rounded-full">{applications.length} Đã ứng tuyển</Badge>
+          <Badge className="bg-black text-white px-4 py-1.5 rounded-full w-fit shrink-0 h-fit mb-1">{applications.length} Đã ứng tuyển</Badge>
         </div>
 
         {error && <Alert variant="destructive" className="mb-6"><AlertDescription>{error}</AlertDescription></Alert>}
 
         {applications.length === 0 ? (
-          <Card className="p-20 text-center border-dashed border-gray-200 rounded-2xl bg-white">
+          <Card className="p-10 md:p-20 text-center border-dashed border-gray-200 rounded-2xl bg-white">
             <div className="max-w-xs mx-auto space-y-4">
               <div className="h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto text-gray-300">
                 <User className="h-8 w-8" />
@@ -106,26 +106,26 @@ const ViewApplicants = () => {
             {applications.map((app) => (
               <Card key={app._id} className="border-none shadow-sm rounded-2xl bg-white hover:shadow-md transition-all group overflow-hidden">
                 <CardContent className="p-0">
-                  <div className="flex flex-col lg:flex-row lg:items-center">
+                  <div className="flex flex-col lg:flex-row">
                     {/* Left: Candidate Info */}
-                    <div className="flex-1 p-8 border-b lg:border-b-0 lg:border-r border-gray-100">
-                      <div className="flex items-start gap-6">
-                        <div className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center text-black font-black text-2xl border-4 border-white shadow-sm">
+                    <div className="flex-1 p-5 md:p-8 border-b lg:border-b-0 lg:border-r border-gray-100">
+                      <div className="flex flex-col sm:flex-row items-start gap-4 md:gap-6">
+                        <div className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center text-black font-black text-2xl border-4 border-white shadow-sm shrink-0">
                           {app.candidate.fullName?.[0]}
                         </div>
-                        <div className="space-y-2 flex-1">
-                          <Link to={`/candidate/${app.candidate._id}`} className="inline-block group">
-                            <h2 className="text-2xl font-black text-black leading-tight group-hover:text-blue-600 transition-colors flex items-center gap-2">
+                        <div className="space-y-2 flex-1 min-w-0">
+                          <Link to={`/candidate/${app.candidate._id}`} className="inline-block group max-w-full">
+                            <h2 className="text-xl md:text-2xl font-black text-black leading-tight group-hover:text-blue-600 transition-colors flex items-center gap-2 truncate">
                               {app.candidate.fullName}
-                              <ExternalLink className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              <ExternalLink className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
                             </h2>
                           </Link>
-                          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-                            <div className="flex items-center gap-2 text-sm font-bold text-gray-500">
-                              <Mail className="h-4 w-4" /> {app.candidate.email}
+                          <div className="flex flex-col md:flex-row md:items-center gap-x-6 gap-y-1">
+                            <div className="flex items-center gap-2 text-sm font-bold text-gray-500 break-all">
+                              <Mail className="h-4 w-4 shrink-0" /> {app.candidate.email}
                             </div>
                             <div className="flex items-center gap-2 text-sm font-bold text-gray-500">
-                              <Clock className="h-4 w-4" /> Đã nộp ngày {new Date(app.createdAt).toLocaleDateString('vi-VN')}
+                              <Clock className="h-4 w-4 shrink-0" /> {new Date(app.createdAt).toLocaleDateString('vi-VN')}
                             </div>
                           </div>
                         </div>
@@ -133,10 +133,10 @@ const ViewApplicants = () => {
                     </div>
 
                     {/* Middle: Actions & Resume */}
-                    <div className="lg:w-1/3 p-8 flex flex-col sm:flex-row lg:flex-col gap-4">
+                    <div className="lg:w-1/3 p-5 md:p-8 flex flex-col sm:flex-row lg:flex-col gap-4">
                       <Button asChild variant="outline" className="w-full border-gray-200 hover:bg-gray-50 rounded-xl font-bold">
                         <a href={app.resume} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2">
-                          <FileText className="h-4 w-4" /> Xem CV đầy đủ <ExternalLink className="h-3 w-3" />
+                          <FileText className="h-4 w-4" /> Xem CV <span className="hidden sm:inline">đầy đủ</span> <ExternalLink className="h-3 w-3" />
                         </a>
                       </Button>
                       

@@ -166,9 +166,9 @@ const MyJobs = () => {
                 <TableBody>
                   {jobs.map((job) => (
                     <TableRow key={job._id} className="hover:bg-gray-50/50 transition-colors border-gray-100">
-                      <TableCell className="p-6">
-                        <div className="font-black text-black text-base">{job.title}</div>
-                        <div className="text-xs font-bold text-gray-400 uppercase tracking-tight flex items-center gap-2 mt-1">
+                      <TableCell className="p-4 sm:p-6 max-w-[150px] xs:max-w-[200px] sm:max-w-none">
+                        <div className="font-black text-black text-sm sm:text-base line-clamp-2 sm:line-clamp-none leading-tight">{job.title}</div>
+                        <div className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-tight flex items-center gap-1 sm:gap-2 mt-1">
                           {getTypeLabel(job.type)} <span className="w-1 h-1 bg-gray-300 rounded-full"></span> {job.location}
                         </div>
                       </TableCell>

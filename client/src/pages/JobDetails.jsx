@@ -8,9 +8,9 @@ import { sendMessage } from '@/api/chatApi';
 import { createReport } from '@/api/reportApi';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Loader2, ArrowLeft, MapPin, Briefcase, Clock, Building2, 
-  Globe, DollarSign, CheckCircle2, Flag, MessageCircle 
+import {
+  Loader2, ArrowLeft, MapPin, Briefcase, Clock, Building2,
+  Globe, DollarSign, CheckCircle2, Flag, MessageCircle
 } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import {
@@ -36,7 +36,7 @@ const JobDetails = () => {
   const [hasApplied, setHasApplied] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   // Reporting state
   const [reportReason, setReportReason] = useState('');
   const [reporting, setReporting] = useState(false);
@@ -134,7 +134,7 @@ const JobDetails = () => {
 
   const handleReport = async () => {
     if (!reportReason.trim()) return;
-    
+
     setReporting(true);
     try {
       await createReport({
@@ -167,24 +167,25 @@ const JobDetails = () => {
   return (
     <div className="min-h-screen bg-gray-50/50 pb-20">
       <div className="bg-white border-b sticky top-0 z-10">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="text-gray-600">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Quay lại
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-2">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="text-gray-600 px-2 sm:px-4">
+            <ArrowLeft className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Quay lại</span>
           </Button>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" className="hidden md:flex">Chia sẻ</Button>
-            
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <Button variant="outline" size="sm" className="hidden lg:flex">Chia sẻ</Button>
+
             {isAuthenticated && user?.role === 'candidate' && (
               <AlertDialog open={isChatModalOpen} onOpenChange={setIsChatModalOpen}>
                 <AlertDialogTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="border-black text-black hover:bg-black hover:text-white"
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-black text-black hover:bg-black hover:text-white px-2 sm:px-4"
                   >
-                    <MessageCircle className="h-4 w-4 mr-2" />
-                    Nhắn tin với nhà tuyển dụng
+                    <MessageCircle className="h-4 w-4 sm:mr-2" />
+                    <span className="hidden sm:inline">Nhắn tin với nhà tuyển dụng</span>
+                    <span className="inline sm:hidden text-xs">Nhắn tin</span>
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="rounded-3xl p-8 border-none max-w-md">
@@ -195,8 +196,8 @@ const JobDetails = () => {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <div className="py-4">
-                    <Textarea 
-                      placeholder="Nhập tin nhắn đầu tiên của bạn..." 
+                    <Textarea
+                      placeholder="Nhập tin nhắn đầu tiên của bạn..."
                       className="rounded-2xl border-gray-100 bg-gray-50 min-h-[120px]"
                       value={chatMessage}
                       onChange={(e) => setChatMessage(e.target.value)}
@@ -204,7 +205,7 @@ const JobDetails = () => {
                   </div>
                   <AlertDialogFooter className="gap-3">
                     <AlertDialogCancel className="rounded-xl font-bold">Hủy</AlertDialogCancel>
-                    <AlertDialogAction 
+                    <AlertDialogAction
                       onClick={handleStartChat}
                       disabled={!chatMessage.trim() || startingChat}
                       className="rounded-xl bg-black hover:bg-gray-800 font-bold"
@@ -217,14 +218,21 @@ const JobDetails = () => {
             )}
 
             {user?.role === 'candidate' && (
-              <Button 
-                size="sm" 
-                className={hasApplied ? "bg-green-600 hover:bg-green-700" : "bg-black hover:bg-gray-800"}
+              <Button
+                size="sm"
+                className={`px-3 sm:px-4 ${hasApplied ? "bg-green-600 hover:bg-green-700" : "bg-black hover:bg-gray-800"}`}
                 disabled={hasApplied || applying}
                 onClick={handleApply}
               >
-                {applying ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : null}
-                {hasApplied ? 'Đã ứng tuyển' : 'Ứng tuyển ngay'}
+                {applying ? <Loader2 className="animate-spin h-4 w-4 sm:mr-2" /> : null}
+                <span className="text-xs sm:text-sm">
+                  {hasApplied ? 'Đã ứng tuyển' : (
+                    <>
+                      <span className="hidden sm:inline">Ứng tuyển ngay</span>
+                      <span className="inline sm:hidden">Ứng tuyển</span>
+                    </>
+                  )}
+                </span>
               </Button>
             )}
           </div>
@@ -240,21 +248,23 @@ const JobDetails = () => {
           <Card className="border-none shadow-sm overflow-hidden">
             <div className="h-32 bg-black"></div>
             <CardContent className="pt-0 p-8">
-              <div className="flex flex-col md:flex-row md:items-end justify-between -mt-10 mb-8 space-y-4 md:space-y-0">
-                <div className="flex items-end space-x-6">
-                  <div className="h-24 w-24 rounded-2xl bg-white shadow-lg border-4 border-white flex items-center justify-center overflow-hidden">
+              <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 space-y-6 md:space-y-0 pt-6">
+                <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
+                  <div className="h-28 w-28 rounded-3xl bg-white shadow-xl border-4 border-white flex items-center justify-center overflow-hidden -mt-20 shrink-0">
                     {job.company?.companyProfile?.logoUrl ? (
                       <img src={job.company.companyProfile.logoUrl} alt="Logo" className="w-full h-full object-contain p-2" />
                     ) : (
-                      <Building2 className="h-12 w-12 text-gray-300" />
+                      <Building2 className="h-14 w-14 text-gray-300" />
                     )}
                   </div>
-                  <div className="pb-1">
-                    <h1 className="text-3xl font-black text-black tracking-tighter">{job.title}</h1>
-                    <p className="text-lg font-bold text-gray-500">{job.company?.fullName}</p>
+                  <div className="space-y-1">
+                    <h1 className="text-3xl md:text-4xl font-black text-black tracking-tighter leading-tight max-w-2xl">
+                      {job.title}
+                    </h1>
+                    <p className="text-xl font-bold text-gray-500">{job.company?.fullName}</p>
                   </div>
                 </div>
-                <Badge className="w-fit h-fit px-4 py-1 text-xs font-black bg-gray-100 text-black border-none uppercase tracking-widest">{job.type}</Badge>
+                <Badge className="w-fit h-fit px-4 py-1.5 text-xs font-black bg-gray-100 text-black border-none uppercase tracking-widest shrink-0">{job.type}</Badge>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-gray-100 mb-8">
@@ -324,7 +334,7 @@ const JobDetails = () => {
                   <Flag className="h-3 w-3" />
                   Bạn thấy có điều gì bất thường về công việc này?
                 </div>
-                
+
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="ghost" size="sm" className="text-xs font-black uppercase tracking-widest text-red-500 hover:text-red-600 hover:bg-red-50">
@@ -339,8 +349,8 @@ const JobDetails = () => {
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <div className="py-4">
-                      <Textarea 
-                        placeholder="Lý do báo cáo (ví dụ: Tin giả, thông tin sai lệch, nội dung không phù hợp...)" 
+                      <Textarea
+                        placeholder="Lý do báo cáo (ví dụ: Tin giả, thông tin sai lệch, nội dung không phù hợp...)"
                         className="rounded-2xl border-gray-100 bg-gray-50 min-h-[120px]"
                         value={reportReason}
                         onChange={(e) => setReportReason(e.target.value)}
@@ -348,7 +358,7 @@ const JobDetails = () => {
                     </div>
                     <AlertDialogFooter className="gap-3">
                       <AlertDialogCancel className="rounded-xl font-bold">Hủy</AlertDialogCancel>
-                      <AlertDialogAction 
+                      <AlertDialogAction
                         onClick={handleReport}
                         disabled={!reportReason.trim() || reporting}
                         className="rounded-xl bg-red-600 hover:bg-red-700 font-bold"
@@ -373,12 +383,12 @@ const JobDetails = () => {
               <p className="text-gray-500 text-sm leading-relaxed line-clamp-6 font-medium">
                 {job.company?.companyProfile?.description || 'Không có mô tả cho công ty này.'}
               </p>
-              
+
               <div className="space-y-3 pt-4 border-t border-gray-100">
                 {job.company?.companyProfile?.website && (
-                  <a 
-                    href={job.company.companyProfile.website} 
-                    target="_blank" 
+                  <a
+                    href={job.company.companyProfile.website}
+                    target="_blank"
                     rel="noreferrer"
                     className="flex items-center text-sm text-black font-bold hover:underline"
                   >
@@ -407,7 +417,7 @@ const JobDetails = () => {
                   Gia nhập {job.company?.fullName} với vị trí {job.title}.
                 </p>
               </div>
-              <Button 
+              <Button
                 onClick={handleApply}
                 disabled={hasApplied || applying || user?.role === 'recruiter'}
                 className="w-full bg-white text-black hover:bg-gray-100 h-14 rounded-2xl text-lg font-black tracking-tight transition-transform active:scale-95 shadow-xl"

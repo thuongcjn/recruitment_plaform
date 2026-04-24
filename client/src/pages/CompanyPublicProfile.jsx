@@ -106,19 +106,27 @@ const CompanyPublicProfile = () => {
               </Card>
             ) : (
               jobs.map(job => (
-                <Card key={job._id} className="hover:shadow-md transition-shadow">
+                <Card key={job._id} className="hover:shadow-md transition-shadow group">
                   <Link to={`/jobs/${job._id}`}>
-                    <CardContent className="p-6 flex items-center justify-between">
-                      <div className="space-y-1">
-                        <h3 className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors">{job.title}</h3>
-                        <div className="flex items-center space-x-3 text-sm text-gray-500">
-                          <Badge variant="secondary" className="bg-blue-50 text-blue-700">{job.type}</Badge>
-                          <span>{job.location}</span>
-                          <span>•</span>
-                          <span>{job.salaryRange}</span>
+                    <CardContent className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-2 flex-1 min-w-0">
+                        <h3 className="text-lg font-black text-black group-hover:text-blue-600 transition-colors leading-tight truncate">
+                          {job.title}
+                        </h3>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gray-500 font-bold">
+                          <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-none px-2 py-0 h-5 text-[10px] uppercase font-black">
+                            {job.type === 'Internship' ? 'Thực tập' : job.type}
+                          </Badge>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <MapPin className="h-3 w-3" /> {job.location}
+                          </div>
+                          <span className="hidden sm:inline text-gray-300">•</span>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {job.salaryRange}
+                          </div>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-blue-600">
+                      <Button variant="ghost" size="sm" className="w-fit text-blue-600 font-bold hover:bg-blue-50 -ml-2 sm:ml-0">
                         Chi tiết <ExternalLink className="h-4 w-4 ml-2" />
                       </Button>
                     </CardContent>

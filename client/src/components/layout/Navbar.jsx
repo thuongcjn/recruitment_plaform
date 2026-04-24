@@ -33,6 +33,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await storeLogout();
+      setMobileMenuOpen(false);
       navigate('/login');
     } catch (error) {
       console.error('Logout error:', error);
@@ -221,28 +222,28 @@ const Navbar = () => {
           <nav className="flex flex-col gap-4">
             {!isAdmin && (
               <>
-                <Link to="/jobs" className="text-lg font-black text-black">Tìm việc làm</Link>
-                <Link to="/chat" className="text-lg font-black text-black">Tin nhắn</Link>
+                <Link to="/jobs" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Tìm việc làm</Link>
+                <Link to="/chat" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Tin nhắn</Link>
               </>
             )}
             {isAdmin && (
               <>
-                <Link to="/admin/dashboard" className="text-lg font-black text-black">Tổng quan</Link>
-                <Link to="/admin/users" className="text-lg font-black text-black">Người dùng</Link>
-                <Link to="/admin/reports" className="text-lg font-black text-red-600">Báo cáo</Link>
+                <Link to="/admin/dashboard" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Tổng quan</Link>
+                <Link to="/admin/users" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Người dùng</Link>
+                <Link to="/admin/reports" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-red-600">Báo cáo</Link>
               </>
             )}
             {isAuthenticated && user?.role === 'candidate' && (
-              <Link to="/applied-jobs" className="text-lg font-black text-black">Việc đã ứng tuyển</Link>
+              <Link to="/applied-jobs" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Việc đã ứng tuyển</Link>
             )}
             {isAuthenticated && user?.role === 'recruiter' && (
               <>
-                <Link to="/my-jobs" className="text-lg font-black text-black">Bảng điều khiển</Link>
-                <Link to="/post-job" className="text-lg font-black text-black">Đăng tin tuyển dụng</Link>
+                <Link to="/my-jobs" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Bảng điều khiển</Link>
+                <Link to="/post-job" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Đăng tin tuyển dụng</Link>
               </>
             )}
             <DropdownMenuSeparator />
-            <Link to="/profile" className="text-lg font-black text-black">Hồ sơ cá nhân</Link>
+            <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Hồ sơ cá nhân</Link>
             <button onClick={handleLogout} className="text-lg font-black text-red-600 text-left">Đăng xuất</button>
           </nav>
         </div>
