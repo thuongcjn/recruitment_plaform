@@ -1,6 +1,6 @@
 # 🚀 Hiretify - Nền tảng tuyển dụng sinh viên hiện đại
 
-[![GitHub Star History](https://api.star-history.com/svg?repos=thuongcjn/recruitment_plaform&type=Date)](https://star-history.com/#thuongcjn/recruitment_plaform&Date)
+
 
 Hiretify là một nền tảng tuyển dụng toàn diện được thiết kế đặc biệt để kết nối sinh viên và các doanh nghiệp. Với giao diện hiện đại lấy cảm hứng từ Vercel, Hiretify mang đến trải nghiệm tìm việc và ứng tuyển mượt mà, chuyên nghiệp.
 
