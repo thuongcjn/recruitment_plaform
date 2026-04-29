@@ -20,6 +20,7 @@ import AdminReports from './pages/AdminReports';
 import AdminUsers from './pages/AdminUsers';
 import LandingPage from './pages/LandingPage';
 import CandidatePublicProfile from './pages/CandidatePublicProfile';
+import CVBuilder from './pages/CVBuilder';
 import Footer from './components/layout/Footer';
 import { SocketProvider } from './context/SocketContext';
 
@@ -135,6 +136,15 @@ function MainLayout() {
             <RecruiterRoute>
               <ViewApplicants />
             </RecruiterRoute>
+          }
+        />
+
+        <Route
+          path="/cv-builder"
+          element={
+            <ProtectedRoute>
+              <CVBuilder />
+            </ProtectedRoute>
           }
         />
 

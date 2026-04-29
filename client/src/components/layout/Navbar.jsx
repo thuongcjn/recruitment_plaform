@@ -79,12 +79,20 @@ const Navbar = () => {
               )}
 
               {isAuthenticated && user?.role === 'candidate' && (
-                <Link
-                  to="/applied-jobs"
-                  className={`text-sm font-bold transition-all hover:text-black ${isActive('/applied-jobs') ? 'text-black' : 'text-gray-500'}`}
-                >
-                  Việc đã ứng tuyển
-                </Link>
+                <>
+                  <Link
+                    to="/applied-jobs"
+                    className={`text-sm font-bold transition-all hover:text-black ${isActive('/applied-jobs') ? 'text-black' : 'text-gray-500'}`}
+                  >
+                    Việc đã ứng tuyển
+                  </Link>
+                  <Link
+                    to="/cv-builder"
+                    className={`text-sm font-bold transition-all hover:text-black ${isActive('/cv-builder') ? 'text-black' : 'text-gray-500'}`}
+                  >
+                    Tạo CV
+                  </Link>
+                </>
               )}
 
               {isAuthenticated && user?.role === 'recruiter' && (
@@ -234,7 +242,10 @@ const Navbar = () => {
               </>
             )}
             {isAuthenticated && user?.role === 'candidate' && (
-              <Link to="/applied-jobs" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Việc đã ứng tuyển</Link>
+              <>
+                <Link to="/applied-jobs" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Việc đã ứng tuyển</Link>
+                <Link to="/cv-builder" onClick={() => setMobileMenuOpen(false)} className="text-lg font-black text-black">Tạo CV</Link>
+              </>
             )}
             {isAuthenticated && user?.role === 'recruiter' && (
               <>

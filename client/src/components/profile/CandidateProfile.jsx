@@ -8,12 +8,14 @@ import { updateCandidateProfile, uploadFile } from '@/api/profileApi';
 import { getProfile } from '@/api/authApi';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Plus, Trash2, Upload, User, GraduationCap, Briefcase, FileText, CheckCircle, X } from 'lucide-react';
+import { Loader2, Plus, Trash2, Upload, User, GraduationCap, Briefcase, FileText, CheckCircle, X, Wand2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from 'react-router-dom';
 
 const CandidateProfile = () => {
   const { user, setAuth } = useAuthStore();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState({
     bio: '',
     skills: [],
@@ -403,6 +405,12 @@ const CandidateProfile = () => {
                     {profile.resumeUrl ? 'Thay đổi tệp' : 'Tải lên CV'}
                     <input type="file" accept=".pdf" onChange={handleUploadResume} className="absolute inset-0 opacity-0 cursor-pointer" />
                   </Button>
+                  
+                  <Button variant="outline" onClick={() => navigate('/cv-builder')} className="w-full rounded-xl h-12 font-bold border-2 border-blue-600 text-blue-600 hover:bg-blue-50">
+                    <Wand2 className="h-4 w-4 mr-2" />
+                    Tạo CV trực tuyến
+                  </Button>
+
                   {profile.resumeUrl && (
                     <Button variant="outline" asChild className="w-full rounded-xl h-12 font-bold border-2">
                       <a href={profile.resumeUrl} target="_blank" rel="noreferrer">Tải xuống CV hiện tại</a>

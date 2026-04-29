@@ -43,7 +43,11 @@ const userSchema = new mongoose.Schema({
       description: String
     }],
     resumeUrl: String,
-    profilePicture: String
+    profilePicture: String,
+    cvBuilderState: {
+      type: mongoose.Schema.Types.Mixed,
+      default: null
+    }
   },
   // Profile fields for Recruiter
   companyProfile: {

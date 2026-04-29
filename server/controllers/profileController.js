@@ -18,6 +18,7 @@ exports.updateCandidateProfile = async (req, res) => {
     if (req.body.experience !== undefined) user.candidateProfile.experience = req.body.experience;
     if (req.body.resumeUrl !== undefined) user.candidateProfile.resumeUrl = req.body.resumeUrl;
     if (req.body.profilePicture !== undefined) user.candidateProfile.profilePicture = req.body.profilePicture;
+    if (req.body.cvBuilderState !== undefined) user.candidateProfile.cvBuilderState = req.body.cvBuilderState;
 
     await user.save();
 
