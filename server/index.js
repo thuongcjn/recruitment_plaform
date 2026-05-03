@@ -48,6 +48,7 @@ app.use('/api/applications', require('./routes/applicationRoutes'));
 app.use('/api/chat', require('./routes/chatRoutes'));
 app.use('/api/reports', require('./routes/reportRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/ai', require('./routes/aiRoutes'));
 
 // Basic route
 app.get('/', (req, res) => {

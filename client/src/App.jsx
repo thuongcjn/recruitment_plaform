@@ -23,6 +23,7 @@ import CandidatePublicProfile from './pages/CandidatePublicProfile';
 import CVBuilder from './pages/CVBuilder';
 import Footer from './components/layout/Footer';
 import { SocketProvider } from './context/SocketContext';
+import ChatBot from './components/ai/ChatBot';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -178,6 +179,7 @@ function MainLayout() {
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       {!isChatPage && <Footer />}
+      {isAuthenticated && !isChatPage && <ChatBot />}
     </div>
   );
 }

@@ -414,7 +414,7 @@ const JobDetails = () => {
               <div className="space-y-2">
                 <h3 className="text-xl font-black tracking-tighter">Quan tâm đến vị trí này?</h3>
                 <p className="text-gray-400 text-sm font-medium">
-                  Gia nhập {job.company?.fullName} với vị trí {job.title}.
+                  Gia nhập {job.company?.companyProfile?.companyName || 'Không có tên công ty'} với vị trí {job.title}.
                 </p>
               </div>
               <Button

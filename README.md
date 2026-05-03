@@ -1,18 +1,17 @@
-# 🚀 Hiretify - Nền tảng tuyển dụng sinh viên hiện đại
+# 🚀 Hiretify - Nền tảng tuyển dụng kết nối sinh viên và doanh nghiệp
 
 
-
-Hiretify là một nền tảng tuyển dụng toàn diện được thiết kế đặc biệt để kết nối sinh viên và các doanh nghiệp. Với giao diện hiện đại lấy cảm hứng từ Vercel, Hiretify mang đến trải nghiệm tìm việc và ứng tuyển mượt mà, chuyên nghiệp.
+Hiretify là một nền tảng tuyển dụng toàn diện được thiết kế đặc biệt để kết nối sinh viên và các doanh nghiệp. Với giao diện được thiết kế tối giản và hiện đại, Hiretify mang đến trải nghiệm tìm việc và ứng tuyển mượt mà, chuyên nghiệp.
 
 ---
 
 ## ✨ Tính năng nổi bật
 
 ### 🎓 Dành cho Ứng viên (Sinh viên)
-- **Tìm kiếm việc làm:** Lọc việc làm theo ngành nghề, địa điểm và mức lương.
+- **Tìm kiếm việc làm:** Lọc việc làm theo lĩnh vực,hình thức làm việc, tìm kiếm công việc theo từ khóa
 - **Quản lý hồ sơ:** Tạo và cập nhật Profile chuyên nghiệp, tải lên CV.
 - **Ứng tuyển nhanh:** Nộp đơn chỉ với một cú click.
-- **Theo dõi trạng thái:** Cập nhật trạng thái đơn ứng tuyển (Đang chờ, Đã xem, Chấp nhận/Từ chối).
+- **Theo dõi trạng thái:** Nhận thông báo qua Email về trạng thái đơn ứng tuyển (Đang chờ, Đã xem, Chấp nhận/Từ chối).
 - **Chat thời gian thực:** Nhắn tin trực tiếp với nhà tuyển dụng.
 
 ### 🏢 Dành cho Nhà tuyển dụng (Doanh nghiệp)
@@ -72,6 +71,8 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your_email
 SMTP_PASS=your_app_password
+# Gemini API (Dùng để sinh nội dung)
+GEMINI_API_KEY=your_gemini_key
 ```
 
 ### 4. Cấu hình Frontend
@@ -132,7 +133,7 @@ npm run dev
 ---
 
 ## 🤝 Đóng góp
-Chúng tôi luôn hoan nghênh các đóng góp để cải thiện dự án!
+Tôi luôn hoan nghênh các đóng góp để cải thiện dự án!
 1. Fork dự án.
 2. Tạo nhánh tính năng (`git checkout -b feature/AmazingFeature`).
 3. Commit thay đổi (`git commit -m 'Add some AmazingFeature'`).
@@ -145,4 +146,7 @@ Chúng tôi luôn hoan nghênh các đóng góp để cải thiện dự án!
 Dự án này được cấp phép theo MIT License.
 
 ---
-⭐ **Nếu bạn thích dự án này, hãy cho chúng tôi 1 sao nhé!**
+
+[![GitHub Star History](https://api.star-history.com/svg?repos=thuongcjn/recruitment_plaform&type=Date)](https://star-history.com/#thuongcjn/recruitment_plaform&Date)
+
+⭐ **Nếu bạn thích dự án này, hãy cho tôi 1 sao nhé!**
